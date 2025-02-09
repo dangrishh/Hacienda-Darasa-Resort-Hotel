@@ -1,4 +1,6 @@
-to use docker, use these commands
+download docker desktop first to use docker
+
+use these commands to edit files and use docker
 
 -cd to the /server folder
 
