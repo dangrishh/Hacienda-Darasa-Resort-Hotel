@@ -13,6 +13,18 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+  
+  frontend:
+    build: ../client
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    volumes:
+      - ..client:/app
+      - /app/node_modules
+    environment:
+      -  VITE_API_URI=http://localhost:3000
 
   mongo:
     image: mongo
