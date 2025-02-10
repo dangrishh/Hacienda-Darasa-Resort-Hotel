@@ -15,3 +15,15 @@ export const createInquiry = async (req: Request, res: Response) => {
   }
 };
 
+export const getInquiries = async (req: Request, res: Response) => {
+  try {
+    const inquiries = await Inquiry.find();
+    res.status(200).json({ inquiries });
+    // console.log('Inquiries:', inquiries);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching inquiries', error });
+    // console.error('Error fetching inquiries:', error);
+  }
+}
+
+
