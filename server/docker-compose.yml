@@ -8,11 +8,13 @@ services:
     depends_on:
       - mongo
     environment:
-      - PORT=3000
-      - MONGO_URI=mongodb://mongo:27017/mydatabase
+      - PORT=${PORT}
+      - MONGO_URI=${MONGO_URI}
     volumes:
       - .:/app
       - /app/node_modules
+    env_file:
+      - .env
   
   frontend:
     build: ../client
@@ -24,7 +26,9 @@ services:
       - ..client:/app
       - /app/node_modules
     environment:
-      -  VITE_API_URI=http://localhost:3000
+      -  VITE_API_URI=${VITE_API_URI}
+    env_file:
+      -  .env
 
   mongo:
     image: mongo

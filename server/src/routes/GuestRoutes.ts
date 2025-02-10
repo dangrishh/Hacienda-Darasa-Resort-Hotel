@@ -8,8 +8,8 @@ router.post('/inquiries', createInquiry);
 
 router.get('/inquiries', getInquiries);
 
-router.get('/test', (req: Request, res: Response) => {
-  res.send('Hello World');
+router.get('/testing', (req: Request, res: Response) => {
+    res.send('Hello World');
 });
 
 
