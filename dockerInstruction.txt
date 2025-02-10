@@ -1,0 +1,13 @@
+download docker desktop first to use docker
+
+use these commands to edit files and use docker
+
+-cd to the /server folder
+
+-docker-compose up -d (to run the node system)
+
+if you want to save changes
+
+-docker-compose down (to stop the docker)
+-docker-compose build (to save the changes)
+-docker-compose up -d (to run it again)
