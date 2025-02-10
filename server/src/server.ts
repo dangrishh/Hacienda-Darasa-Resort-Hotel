@@ -4,10 +4,10 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import path from 'path';
 
-import client from './routes/CostumerRoutes';
-import inquiryRoutes from './routes/GuestRoutes';
+import GuestRoutes from './routes/GuestRoutes';
+import Costumer from './routes/CostumerRoutes';
+import StaffRoutes from './routes/StaffRoutes';
 import AdminRoutes from './routes/AdminRoutes';
-
 
 dotenv.config();
 
@@ -32,9 +32,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // Routes
-app.use('/api/guest', inquiryRoutes);
-app.use('/api/costumer', client);
+app.use('/api/guest', GuestRoutes);
+app.use('/api/costumer', Costumer);
+app.use('/api/staff', StaffRoutes);
 app.use('/api/admin', AdminRoutes);
+
 
 
 app.get('/', (req: Request, res: Response) => {

@@ -1,23 +1,22 @@
 // src/models/User.ts
 import mongoose, { Schema, Document } from 'mongoose';
 
-interface ICostumerUsers extends Document {
+interface IStaffUsers extends Document {
   fullname: string;
-  facebookLink: string;
   email: string;
-  contactNumber: string;
   password: string;
+  isApproved: boolean;
 }
 
-const CostumerUsersSchema: Schema = new Schema(
+const StaffSchema: Schema = new Schema(
   {
     fullname: { type: String, required: true },
-    facebookLink: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    contactNumber: { type: String, required: true },
     password: { type: String, required: true },
+    isApproved: { type: Boolean, default: false }, // Optional flag for approval
   },
   { timestamps: true }
 );
 
-export default mongoose.model<ICostumerUsers>('ClientUsers', CostumerUsersSchema);
+export default mongoose.model<IStaffUsers>('StaffUsers', StaffSchema);
+

@@ -4,8 +4,8 @@ import Inquiry from '../models/Inquiry';
 
 export const createInquiry = async (req: Request, res: Response) => {
   try {
-    const { fullName, contactNumber, email, fbAccount, messages } = req.body;
-    const newInquiry = new Inquiry({ fullName, contactNumber, email, fbAccount, messages });
+    const { fullName, contactNumber, email, fbLink, messages } = req.body;
+    const newInquiry = new Inquiry({ fullName, contactNumber, email, fbLink, messages });
     await newInquiry.save();
     res.status(201).json({ message: 'Inquiry submitted successfully', inquiry: newInquiry });
     // console.log('Inquiry submitted successfully:', newInquiry);

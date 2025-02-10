@@ -1,6 +1,6 @@
 // src/routes/inquiryRoutes.ts
 import express from 'express';
-import { createInquiry } from '../controllers/guest';
+import { createInquiry } from '../controllers/GuestController';
 
 const router = express.Router();
 
