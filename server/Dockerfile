@@ -8,16 +8,16 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install && npm install -g nodemon typescript
 
 # Copy the rest of the project files
 COPY . .
 
-# Build TypeScript if needed
+# Ensure TypeScript compiles before running
 RUN npm run build
 
 # Expose the port your app runs on
 EXPOSE 3000
 
-# Start the backend server
-CMD ["node", "dist/server.js"]
+# Start the backend server with nodemon
+CMD ["npx", "nodemon", "--watch", "dist", "--ext", "js,json", "--exec", "node", "dist/server.js"]

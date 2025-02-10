@@ -12,8 +12,11 @@ services:
       - MONGO_URI=mongodb://mongo:27017/mydatabase
     volumes:
       - .:/app
-      - /app/node_modules
-  
+      - /app/node_modules  # Prevent overwriting node_modules inside the container
+      - /app/dist  # Ensure dist directory updates inside container
+    command: ["sh", "-c", "npm run build && npx nodemon --watch dist --ext js,json --exec node dist/server.js"]
+    
+
   frontend:
     build: ../client
     ports:
@@ -21,10 +24,10 @@ services:
     depends_on:
       - backend
     volumes:
-      - ..client:/app
+      - ../client:/app  # Fixed path typo (..client -> ../client)
       - /app/node_modules
     environment:
-      -  VITE_API_URI=http://localhost:3000
+      - VITE_API_URI=http://localhost:3000
 
   mongo:
     image: mongo

@@ -38,7 +38,14 @@ app.use('/api/admin', AdminRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {
+  console.log("Hello from express"); 
+  process.stdout.write('Flushed: Hello from express\n');  // ✅ Forces immediate output
   res.send('Hello World from Express and TypeScript');
+});
+
+app.get('/welcome', (req: Request, res: Response) => {
+  console.log("Welcome endpoint hit!");
+  res.send('Hello World');
 });
 
 // Connect to MongoDB
