@@ -10,12 +10,11 @@ services:
     environment:
       - PORT=${PORT}
       - MONGO_URI=${MONGO_URI}
-    volumes:
-      - .:/app
-      - /app/node_modules
     env_file:
       - .env
-  
+    volumes:
+      - .:/app
+
   frontend:
     build: ../client
     ports:
@@ -23,7 +22,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ..client:/app
+      - ../client:/app  # Fixed path typo (..client -> ../client)
       - /app/node_modules
     environment:
       -  VITE_API_URI=${VITE_API_URI}

@@ -41,11 +41,12 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv = __importStar(require("dotenv"));
 const path_1 = __importDefault(require("path"));
-const client_1 = __importDefault(require("./routes/client"));
-const guest_1 = __importDefault(require("./routes/guest"));
+const CostumerRoutes_1 = __importDefault(require("./routes/CostumerRoutes"));
+const GuestRoutes_1 = __importDefault(require("./routes/GuestRoutes"));
+const AdminRoutes_1 = __importDefault(require("./routes/AdminRoutes"));
 dotenv.config();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 // Middleware
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -61,10 +62,17 @@ app.use((req, res, next) => {
     next();
 });
 // Routes
-app.use('/api/guest', guest_1.default);
-app.use('/api/client', client_1.default);
+app.use('/api/guest', GuestRoutes_1.default);
+app.use('/api/costumer', CostumerRoutes_1.default);
+app.use('/api/admin', AdminRoutes_1.default);
 app.get('/', (req, res) => {
+    console.log("Hello from express");
+    process.stdout.write('Flushed: Hello from express\n'); // ✅ Forces immediate output
     res.send('Hello World from Express and TypeScript');
+});
+app.get('/welcome', (req, res) => {
+    console.log("Welcome endpoint hit!");
+    res.send('Hello World');
 });
 // Connect to MongoDB
 const MONGO_URI = process.env.MONGO_URI || 'your_default_mongo_uri';
