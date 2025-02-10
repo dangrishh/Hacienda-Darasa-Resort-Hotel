@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerCostumerUser, loginCostumerUser } from '../controllers/CostumerController';
+import { registerCostumerUser, loginCostumerUser, selectCategory } from '../controllers/CostumerController';
 
 const router = express.Router();
 
@@ -8,5 +8,10 @@ router.post('/register', registerCostumerUser);
 
 // Login Route
 router.post('/login', loginCostumerUser);
+
+// ✅ Select an existing category (User ID required)
+router.post('/categories/book-selected', selectCategory);
+
+
 
 export default router;

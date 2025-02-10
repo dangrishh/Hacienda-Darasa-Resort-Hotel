@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import CostumerUser from '../models/CostumerUsers';
+import { AdminUsers, Category } from '../models/AdminUsers';
+
+
 
 // Register Controller
 export const registerCostumerUser = async (req: Request, res: Response): Promise<void> => {
@@ -63,5 +67,42 @@ export const loginCostumerUser = async (req: Request, res: Response): Promise<vo
         res.status(200).json({ message: 'Login successful', token });
     } catch (err) {
         res.status(500).json({ message: 'Error logging in', error: err });
+    }
+};
+
+
+export const selectCategory = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { costumerId, categoryId } = req.body; // ✅ Use 'categoryId' instead of '_id'
+
+        // ✅ Check if the user exists
+        const user = await CostumerUser.findById(costumerId);
+        if (!user) {
+            console.log('User not found');
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+
+        // ✅ Check if the category exists
+        const category = await Category.findById(categoryId); // ✅ Use categoryId (ObjectId)
+        if (!category) {
+            console.log('Category not found');
+            res.status(404).json({ message: 'Category not found' });
+            return;
+        }
+
+        // ✅ Save the selected category in the user’s profile
+        user.selectedCategory = category._id as mongoose.Types.ObjectId;
+
+        await user.save();
+
+        res.status(200).json({
+            message: 'Category selected successfully',
+            category: category.toObject(), // ✅ Convert Mongoose doc to JSON
+            user: user.toObject(),
+        });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error });
     }
 };
