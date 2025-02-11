@@ -6,7 +6,6 @@ import CostumerUser from '../models/CostumerUsers';
 import { AdminUsers, Category } from '../models/AdminUsers';
 
 
-
 // Register Controller
 export const registerCostumerUser = async (req: Request, res: Response): Promise<void> => {
     const { fullname, facebookLink, email, contactNumber, password } = req.body;
@@ -73,7 +72,7 @@ export const loginCostumerUser = async (req: Request, res: Response): Promise<vo
 
 export const selectCategory = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { costumerId, categoryId } = req.body; // ✅ Use 'categoryId' instead of '_id'
+        const { costumerId, categoryId } = req.body; 
 
         // ✅ Check if the user exists
         const user = await CostumerUser.findById(costumerId);
@@ -84,7 +83,7 @@ export const selectCategory = async (req: Request, res: Response): Promise<void>
         }
 
         // ✅ Check if the category exists
-        const category = await Category.findById(categoryId); // ✅ Use categoryId (ObjectId)
+        const category = await Category.findById(categoryId);
         if (!category) {
             console.log('Category not found');
             res.status(404).json({ message: 'Category not found' });
@@ -98,7 +97,7 @@ export const selectCategory = async (req: Request, res: Response): Promise<void>
 
         res.status(200).json({
             message: 'Category selected successfully',
-            category: category.toObject(), // ✅ Convert Mongoose doc to JSON
+            category: category.toObject(),
             user: user.toObject(),
         });
     } catch (error) {
