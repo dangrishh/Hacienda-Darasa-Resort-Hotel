@@ -66,20 +66,30 @@ export const loginAdminUser = async (req: Request, res: Response): Promise<void>
 
 export const createCategory = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name } = req.body;
+        const { name, quantity, checkIn, checkOut, rate, totalPax, amenities } = req.body;
 
-        // Check if category already exists
+        // ✅ Check if the category already exists
         const existingCategory = await Category.findOne({ name });
         if (existingCategory) {
             res.status(400).json({ message: 'Category already exists' });
-            return; // ✅ Ensure early return
+            return;
         }
 
-        const newCategory = new Category({ name });
+        const newCategory = new Category({
+            name,
+            quantity,
+            checkIn,
+            checkOut,
+            rate,
+            totalPax,
+            amenities
+        });
+
         await newCategory.save();
 
         res.status(201).json({ message: 'Category added successfully', category: newCategory });
     } catch (error) {
+        console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
@@ -94,24 +104,45 @@ export const getCategories = async (req: Request, res: Response) => {
     }
   };
   
-// ✅ Update category by ID
-export const updateCategory = async (req: Request, res: Response): Promise<void> => {
+  export const updateCategory = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params;
-        const { name } = req.body;
+        const { categoryId } = req.params; // Get the category ID from URL params
+        const { name, quantity, checkIn, checkOut, rate, totalPax, amenities } = req.body;
 
-        const updatedCategory = await Category.findByIdAndUpdate(id, { name }, { new: true });
-
-        if (!updatedCategory) {
+        // ✅ Check if the category exists
+        const category = await Category.findById(categoryId);
+        if (!category) {
             res.status(404).json({ message: 'Category not found' });
             return;
         }
 
-        res.status(200).json({ message: 'Category updated successfully', category: updatedCategory });
+        // ✅ Check if a category with the new name already exists (to prevent duplicate names)
+        if (name && name !== category.name) {
+            const existingCategory = await Category.findOne({ name });
+            if (existingCategory) {
+                res.status(400).json({ message: 'A category with this name already exists' });
+                return;
+            }
+        }
+
+        // ✅ Update category fields
+        category.name = name ?? category.name;
+        category.quantity = quantity ?? category.quantity;
+        category.checkIn = checkIn ?? category.checkIn;
+        category.checkOut = checkOut ?? category.checkOut;
+        category.rate = rate ?? category.rate;
+        category.totalPax = totalPax ?? category.totalPax;
+        category.amenities = amenities ?? category.amenities;
+
+        await category.save();
+
+        res.status(200).json({ message: 'Category updated successfully', category });
     } catch (error) {
+        console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
 
 // ✅ Delete category by ID
 export const deleteCategory = async (req: Request, res: Response): Promise<void> => {
