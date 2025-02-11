@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import UserAdmin from '../models/AdminUsers';
+import UserStaff from '../models/StaffUsers';
 
 // Register Controller
-export const registerUser = async (req: Request, res: Response): Promise<void> => {
+export const registerStaffUser = async (req: Request, res: Response): Promise<void> => {
     const { fullname, email, password } = req.body;
 
     try {
         // Check if the user already exists
-        const adminExists = await UserAdmin.findOne({ email });
-        if (adminExists) {
+        const staffExists = await UserStaff.findOne({ email });
+        if (staffExists) {
             res.status(400).json({ message: 'User already exists' });
             return;
         }
@@ -19,7 +19,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new user
-        const newUser = new UserAdmin({
+        const newUser = new UserStaff({
             fullname,
             email,
             password: hashedPassword,
@@ -33,25 +33,25 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 };
 
 // Login Controller
-export const loginUser = async (req: Request, res: Response): Promise<void> => {
+export const loginStaffUser = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
     try {
         // Find user by email
-        const admin = await UserAdmin.findOne({ email });
-        if (!admin) {
+        const staff = await UserStaff.findOne({ email });
+        if (!staff) {
             res.status(400).json({ message: 'User not found' });
             return;
         }
 
         // Check if the account is approved
-        if (!admin.isApproved) {
+        if (!staff.isApproved) {
             res.status(403).json({ message: 'Account not approved. Please wait for admin approval.' });
             return;
         }
 
         // Compare password
-        const isMatch = await bcrypt.compare(password, admin.password);
+        const isMatch = await bcrypt.compare(password, staff.password);
         if (!isMatch) {
             res.status(400).json({ message: 'Invalid credentials' });
             return;
@@ -59,7 +59,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { adminId: admin._id },
+            { staffId: staff._id },
             process.env.JWT_SECRET || 'your_secret_key',
             { expiresIn: '1h' }
         );
