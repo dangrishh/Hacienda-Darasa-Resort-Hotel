@@ -6,38 +6,22 @@ const contentStyle: React.CSSProperties = {
   color: '#fff',
   lineHeight: '160px',
   textAlign: 'center',
-  background: 'green',
+  background: '#364d79',
 };
 
 const App: React.FC = () => (
   <Carousel autoplay>
     <div>
-      <img 
-        src="https://img.freepik.com/free-photo/swimming-pool_74190-2104.jpg" 
-        alt="Slide 1" 
-        style={ contentStyle }
-      />
+      <h3 style={contentStyle}>1</h3>
     </div>
     <div>
-      <img 
-        src="https://via.placeholder.com/800x400" 
-        alt="Slide 2" 
-        style={{ width: "100%", height: "400px", objectFit: "cover" }}
-      />
+      <h3 style={contentStyle}>2</h3>
     </div>
     <div>
-      <img 
-        src="https://via.placeholder.com/800x400" 
-        alt="Slide 3" 
-        style={{ width: "100%", height: "400px", objectFit: "cover" }}
-      />
+      <h3 style={contentStyle}>3</h3>
     </div>
     <div>
-      <img 
-        src="https://via.placeholder.com/800x400" 
-        alt="Slide 4" 
-        style={{ width: "100%", height: "400px", objectFit: "cover" }}
-      />
+      <h3 style={contentStyle}>4</h3>
     </div>
   </Carousel>
 );
