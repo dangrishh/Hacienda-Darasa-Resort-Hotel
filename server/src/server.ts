@@ -40,17 +40,10 @@ app.use('/api/admin', AdminRoutes);
 app.use('/api/chat', ChatRoutes);
 
 
-
 app.get('/', (req: Request, res: Response) => {
-  console.log("Hello from express"); 
-  process.stdout.write('Flushed: Hello from express\n');  // ✅ Forces immediate output
   res.send('Hello World from Express and TypeScript');
 });
 
-app.get('/welcome', (req: Request, res: Response) => {
-  console.log("Welcome endpoint hit!");
-  res.send('Hello World');
-});
 
 // Connect to MongoDB
 const MONGO_URI = process.env.MONGO_URI || 'your_default_mongo_uri';

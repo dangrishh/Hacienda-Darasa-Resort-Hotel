@@ -41,3 +41,27 @@ export const getMessages = async (req: Request, res: Response): Promise<void> =>
       res.status(500).json({ error: 'Failed to fetch messages' });
     }
   };
+
+  export const getClientMessages = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { customer } = req.params; // Assuming the customer name is passed as a route parameter
+  
+      if (!customer) {
+        res.status(400).json({ error: "Customer identifier is required" });
+        return;
+      }
+  
+      const messages = await Chat.find({ customer }).sort({ timestamp: 1 });
+  
+      if (messages.length === 0) {
+        res.status(404).json({ message: "No messages found for this customer" });
+        return;
+      }
+  
+      res.json(messages);
+    } catch (error) {
+      console.error("Error fetching customer messages:", error);
+      res.status(500).json({ error: "Failed to fetch messages" });
+    }
+  };
+  
