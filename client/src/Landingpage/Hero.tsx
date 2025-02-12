@@ -1,29 +1,15 @@
-import React from 'react';
-import { Carousel } from 'antd';
+import React from "react";
 
-const contentStyle: React.CSSProperties = {
-  height: '160px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79',
+import sampleImage from "../assets/img/bg.jpg"; // Import image
+
+const App: React.FC = () => {
+  return (
+    <div className="h-[2000px]">
+      
+      <img className="" src={sampleImage} />
+
+    </div>
+  );
 };
-
-const App: React.FC = () => (
-  <Carousel autoplay>
-    <div>
-      <h3 style={contentStyle}>1</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>2</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>3</h3>
-    </div>
-    <div>
-      <h3 style={contentStyle}>4</h3>
-    </div>
-  </Carousel>
-);
 
 export default App;
