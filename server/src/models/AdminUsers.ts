@@ -6,14 +6,17 @@ interface IAdminUsers extends Document {
   email: string;
   password: string;
 }
-interface ICategory extends Document {
+interface IRoom extends Document {
   name: string;
+  roomNumbers: number[];
   quantity: number;
-  totalPax: number;
-  checkIn: Date;
-  checkOut: Date;
   rate: number;
+  extraPersonCharge: number;
+  checkIn: string;
+  checkOut: string;
   amenities: string[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const AdminUsersSchema: Schema = new Schema(
@@ -25,18 +28,19 @@ const AdminUsersSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-const CategorySchema: Schema = new Schema(
+const RoomSchema: Schema = new Schema(
   {
-    name: { type: String, required: true, unique: true },
-    quantity: { type: Number, required: true },
-    totalPax: { type: Number, required: true }, // Added total pax field
-    checkIn: { type: Date, required: true },
-    checkOut: { type: Date, required: true },
-    rate: { type: Number, required: true },
-    amenities: { type: [String], required: true },
+      name: { type: String, required: true, unique: true },
+      roomNumbers: { type: [Number], required: true }, // Example: [203, 204, 205, 206, 207, 208, 209]
+      quantity: { type: Number, required: true },
+      rate: { type: Number, required: true },
+      extraPersonCharge: { type: Number, required: true },
+      checkIn: { type: String, required: true },
+      checkOut: { type: String, required: true },
+      amenities: { type: [String], required: true },
   },
   { timestamps: true }
 );
  
 export const AdminUsers = mongoose.model<IAdminUsers>('AdminUsers', AdminUsersSchema);
-export const Category = mongoose.model<ICategory>('Category', CategorySchema);
+export const Room = mongoose.model<IRoom>('Room', RoomSchema);

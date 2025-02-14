@@ -1,8 +1,19 @@
 
 import express, { Router, Request, Response } from 'express';
-import { registerAdminUser, loginAdminUser, getCategories, createCategory, updateCategory,
-    deleteCategory
- } from '../controllers/AdminController';
+
+import { 
+    registerAdminUser, 
+    loginAdminUser, 
+} from '../controllers/AdminController';
+
+
+import { 
+    createRoom,
+    deleteRoom, 
+    getAllRooms, 
+    updateRoom 
+} from '../controllers/AdminController';
+
 
 const router: Router = express.Router(); // Explicitly define the router type
 
@@ -13,11 +24,11 @@ router.post('/register', registerAdminUser);
 // Login Route
 router.post('/login', loginAdminUser);
 
+// Room Routes
+router.put('/room/update/:roomId', updateRoom);
+router.delete('/room/delete/:roomId', deleteRoom);
+router.get('/room/all', getAllRooms);
+router.post('/room/create', createRoom);
 
-// Category Route
-router.get('/category', getCategories);
-router.post('/category', createCategory);
-router.put('/category/:id', updateCategory);  
-router.delete('/category/:id', deleteCategory); 
 
 export default router;

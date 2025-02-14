@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { AdminUsers, Category } from '../models/AdminUsers';
+import { AdminUsers, Room } from '../models/AdminUsers';
 
 // Register Controller
 export const registerAdminUser = async (req: Request, res: Response): Promise<void> => {
@@ -64,100 +64,88 @@ export const loginAdminUser = async (req: Request, res: Response): Promise<void>
     }
 };
 
-export const createCategory = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { name, quantity, checkIn, checkOut, rate, totalPax, amenities } = req.body;
 
-        // ✅ Check if the category already exists
-        const existingCategory = await Category.findOne({ name });
-        if (existingCategory) {
-            res.status(400).json({ message: 'Category already exists' });
+
+// ✅ Admin can post a new room
+export const createRoom = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { name, roomNumbers, quantity, rate, extraPersonCharge, checkIn, checkOut, amenities } = req.body;
+
+        // ✅ Check if the room name already exists
+        const existingRoom = await Room.findOne({ name });
+        if (existingRoom) {
+            res.status(400).json({ message: 'Room already exists' });
             return;
         }
 
-        const newCategory = new Category({
+        const newRoom = new Room({
             name,
+            roomNumbers,
             quantity,
+            rate,
+            extraPersonCharge,
             checkIn,
             checkOut,
-            rate,
-            totalPax,
-            amenities
+            amenities,
         });
 
-        await newCategory.save();
+        await newRoom.save();
 
-        res.status(201).json({ message: 'Category added successfully', category: newCategory });
+        res.status(201).json({ message: 'Room added successfully', room: newRoom });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
 
-  // Get all categories
-export const getCategories = async (req: Request, res: Response) => {
+export const updateRoom = async (req: Request, res: Response): Promise<void> => {
     try {
-      const categories = await Category.find();
-      res.status(200).json(categories);
-    } catch (error) {
-      res.status(500).json({ message: 'Server error', error });
-    }
-  };
-  
-  export const updateCategory = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { categoryId } = req.params; // Get the category ID from URL params
-        const { name, quantity, checkIn, checkOut, rate, totalPax, amenities } = req.body;
+        const { roomId } = req.params;
+        const { name, roomNumbers, quantity, rate, extraPersonCharge, checkIn, checkOut, amenities } = req.body;
 
-        // ✅ Check if the category exists
-        const category = await Category.findById(categoryId);
-        if (!category) {
-            res.status(404).json({ message: 'Category not found' });
+        const updatedRoom = await Room.findByIdAndUpdate(
+            roomId,
+            { name, roomNumbers, quantity, rate, extraPersonCharge, checkIn, checkOut, amenities },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedRoom) {
+            res.status(404).json({ message: 'Room not found' });
             return;
         }
 
-        // ✅ Check if a category with the new name already exists (to prevent duplicate names)
-        if (name && name !== category.name) {
-            const existingCategory = await Category.findOne({ name });
-            if (existingCategory) {
-                res.status(400).json({ message: 'A category with this name already exists' });
-                return;
-            }
-        }
-
-        // ✅ Update category fields
-        category.name = name ?? category.name;
-        category.quantity = quantity ?? category.quantity;
-        category.checkIn = checkIn ?? category.checkIn;
-        category.checkOut = checkOut ?? category.checkOut;
-        category.rate = rate ?? category.rate;
-        category.totalPax = totalPax ?? category.totalPax;
-        category.amenities = amenities ?? category.amenities;
-
-        await category.save();
-
-        res.status(200).json({ message: 'Category updated successfully', category });
+        res.status(200).json({ message: 'Room updated successfully', room: updatedRoom });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
 
-
-// ✅ Delete category by ID
-export const deleteCategory = async (req: Request, res: Response): Promise<void> => {
+export const deleteRoom = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { categoryId } = req.params;
+        const { roomId } = req.params;
 
-        const deletedCategory = await Category.findByIdAndDelete(categoryId);
+        const deletedRoom = await Room.findByIdAndDelete(roomId);
 
-        if (!deletedCategory) {
-            res.status(404).json({ message: 'Category not found' });
+        if (!deletedRoom) {
+            res.status(404).json({ message: 'Room not found' });
             return;
         }
 
-        res.status(200).json({ message: 'Category deleted successfully' });
+        res.status(200).json({ message: 'Room deleted successfully' });
     } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+export const getAllRooms = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const rooms = await Room.find();
+
+        res.status(200).json({ message: 'Rooms retrieved successfully', rooms });
+    } catch (error) {
+        console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };

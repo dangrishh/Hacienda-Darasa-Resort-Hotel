@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import CostumerUser from '../models/CostumerUsers';
-import { AdminUsers, Category } from '../models/AdminUsers';
+import { AdminUsers, Room } from '../models/AdminUsers';
 
 
 // Register Controller
@@ -83,7 +83,7 @@ export const selectCategory = async (req: Request, res: Response): Promise<void>
         }
 
         // ✅ Check if the category exists
-        const category = await Category.findById(categoryId);
+        const category = await Room.findById(categoryId);
         if (!category) {
             console.log('Category not found');
             res.status(404).json({ message: 'Category not found' });
