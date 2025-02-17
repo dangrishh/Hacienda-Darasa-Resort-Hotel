@@ -7,9 +7,4 @@ router.post('/inquiries', createInquiry);
 
 router.get('/inquiries', getInquiries);
 
-router.get('/testing', (req: Request, res: Response) => {
-    res.send('Hello World');
-});
-
-
 export default router;
