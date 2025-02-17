@@ -9,6 +9,7 @@ import Costumer from './routes/CostumerRoutes';
 import StaffRoutes from './routes/StaffRoutes';
 import AdminRoutes from './routes/AdminRoutes';
 import ChatRoutes from './routes/ChatRoutes';
+import RoomRoutes from './routes/RoomRoutes';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use('/api/costumer', Costumer);
 app.use('/api/staff', StaffRoutes);
 app.use('/api/admin', AdminRoutes);
 app.use('/api/chat', ChatRoutes);
+app.use('/api/room', RoomRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {
