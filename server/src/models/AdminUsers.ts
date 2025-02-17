@@ -6,14 +6,17 @@ interface IAdminUsers extends Document {
   email: string;
   password: string;
 }
-interface IRoom extends Document {
+
+interface IRoomRate {
+  duration: number; // "12 hours" or "22 hours"
+  price: number;
+  maxPersons: number; // Maximum allowed persons per rate
+}
+
+interface IRoomDetails extends Document {
   name: string;
-  roomNumbers: number[];
-  quantity: number;
-  rate: number;
+  rates: IRoomRate[]; // Multiple rate options
   extraPersonCharge: number;
-  checkIn: string;
-  checkOut: string;
   amenities: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -28,19 +31,22 @@ const AdminUsersSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-const RoomSchema: Schema = new Schema(
+const RoomDetailsSchema: Schema = new Schema(
   {
-      name: { type: String, required: true, unique: true },
-      roomNumbers: { type: [Number], required: true }, // Example: [203, 204, 205, 206, 207, 208, 209]
-      quantity: { type: Number, required: true },
-      rate: { type: Number, required: true },
-      extraPersonCharge: { type: Number, required: true },
-      checkIn: { type: String, required: true },
-      checkOut: { type: String, required: true },
-      amenities: { type: [String], required: true },
+    name: { type: String, required: true },
+    rates: [
+      {
+        duration: { type: Number, required: true }, // Example: "12 hours"
+        price: { type: Number, required: true }, // Example: 2000
+        maxPersons: { type: Number, required: true }, // Example: 2
+      },
+    ],
+    extraPersonCharge: { type: Number, required: true },
+    amenities: { type: [String], required: true },
   },
   { timestamps: true }
 );
+
  
 export const AdminUsers = mongoose.model<IAdminUsers>('AdminUsers', AdminUsersSchema);
-export const Room = mongoose.model<IRoom>('Room', RoomSchema);
+export const RoomDetails = mongoose.model<IRoomDetails>('RoomDetails', RoomDetailsSchema);

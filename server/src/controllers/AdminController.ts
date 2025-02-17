@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { AdminUsers, Room } from '../models/AdminUsers';
+import { AdminUsers, RoomDetails } from '../models/AdminUsers';
+import uploadRooms from '../middleware/uploadRooms'; 
 
 // Register Controller
 export const registerAdminUser = async (req: Request, res: Response): Promise<void> => {
@@ -64,86 +65,94 @@ export const loginAdminUser = async (req: Request, res: Response): Promise<void>
     }
 };
 
-
-
-// ✅ Admin can post a new room
-export const createRoom = async (req: Request, res: Response): Promise<void> => {
+export const createRoomDetails = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, roomNumbers, quantity, rate, extraPersonCharge, checkIn, checkOut, amenities } = req.body;
+        const { name, rates, extraPersonCharge, amenities } = req.body;
 
-        // ✅ Check if the room name already exists
-        const existingRoom = await Room.findOne({ name });
+        // Ensure rates are properly formatted
+        if (!Array.isArray(rates) || rates.length === 0) {
+            res.status(400).json({ message: 'Rates must be an array with at least one item.' });
+            return 
+        }
+
+        // Check if all rates include maxPersons
+        for (const rate of rates) {
+            if (!rate.maxPersons) {
+                res.status(400).json({ message: 'Each rate must include maxPersons.' });
+                return 
+            }
+        }
+
+        // Check if room already exists
+        const existingRoom = await RoomDetails.findOne({ name });
         if (existingRoom) {
-            res.status(400).json({ message: 'Room already exists' });
+            res.status(400).json({ message: 'Room details already exist' });
             return;
         }
 
-        const newRoom = new Room({
+        // Create a new Room with multiple rate options
+        const newRoom = new RoomDetails({
             name,
-            roomNumbers,
-            quantity,
-            rate,
+            rates,
             extraPersonCharge,
-            checkIn,
-            checkOut,
             amenities,
         });
 
         await newRoom.save();
-
-        res.status(201).json({ message: 'Room added successfully', room: newRoom });
+        res.status(201).json({ message: 'Room Details added successfully', room: newRoom });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
 
-export const updateRoom = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { roomId } = req.params;
-        const { name, roomNumbers, quantity, rate, extraPersonCharge, checkIn, checkOut, amenities } = req.body;
 
-        const updatedRoom = await Room.findByIdAndUpdate(
-            roomId,
-            { name, roomNumbers, quantity, rate, extraPersonCharge, checkIn, checkOut, amenities },
+export const updateRoomDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { RoomDetailsId } = req.params;
+        const { rate, extraPersonCharge, amenities } = req.body;
+
+        const updatedRoomDetails = await RoomDetails.findByIdAndUpdate(
+            RoomDetailsId,
+            { name, rate, extraPersonCharge,  amenities },
             { new: true, runValidators: true }
         );
 
-        if (!updatedRoom) {
-            res.status(404).json({ message: 'Room not found' });
+        if (!updatedRoomDetails) {
+            res.status(404).json({ message: 'Room Details not found' });
             return;
         }
 
-        res.status(200).json({ message: 'Room updated successfully', room: updatedRoom });
+        res.status(200).json({ message: 'Room Details updated successfully', room: updatedRoomDetails });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
 
-export const deleteRoom = async (req: Request, res: Response): Promise<void> => {
+export const deleteRoomDetails = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { roomId } = req.params;
+        const { RoomDetailsId } = req.params;
 
-        const deletedRoom = await Room.findByIdAndDelete(roomId);
+        const deletedRoomDetails = await RoomDetails.findByIdAndDelete(RoomDetailsId);
 
-        if (!deletedRoom) {
-            res.status(404).json({ message: 'Room not found' });
+        if (!deletedRoomDetails) {
+            res.status(404).json({ message: 'Room Details not found' });
             return;
         }
 
-        res.status(200).json({ message: 'Room deleted successfully' });
+        res.status(200).json({ message: 'Room Details deleted successfully' });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
 
-export const getAllRooms = async (req: Request, res: Response): Promise<void> => {
+export const getAllRoomsDetials = async (req: Request, res: Response): Promise<void> => {
     try {
-        const rooms = await Room.find();
+        const rooms = await RoomDetails.find();
 
-        res.status(200).json({ message: 'Rooms retrieved successfully', rooms });
+        res.status(200).json({ message: 'Room Details retrieved successfully', rooms });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });

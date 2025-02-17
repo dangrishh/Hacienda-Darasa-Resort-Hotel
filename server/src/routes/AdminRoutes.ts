@@ -1,6 +1,8 @@
 
 import express, { Router, Request, Response } from 'express';
 
+import uploadRooms from '../middleware/uploadRooms'; // ✅ Import middleware
+
 import { 
     registerAdminUser, 
     loginAdminUser, 
@@ -8,10 +10,10 @@ import {
 
 
 import { 
-    createRoom,
-    deleteRoom, 
-    getAllRooms, 
-    updateRoom 
+    createRoomDetails,
+    deleteRoomDetails, 
+    getAllRoomsDetials, 
+    updateRoomDetails 
 } from '../controllers/AdminController';
 
 
@@ -25,10 +27,9 @@ router.post('/register', registerAdminUser);
 router.post('/login', loginAdminUser);
 
 // Room Routes
-router.put('/room/update/:roomId', updateRoom);
-router.delete('/room/delete/:roomId', deleteRoom);
-router.get('/room/all', getAllRooms);
-router.post('/room/create', createRoom);
-
+router.put('/room-details/update/:roomId', updateRoomDetails);
+router.delete('/room-details/delete/:roomId', deleteRoomDetails);
+router.get('/room-details/all', getAllRoomsDetials);
+router.post('/room-details/create', createRoomDetails);
 
 export default router;
