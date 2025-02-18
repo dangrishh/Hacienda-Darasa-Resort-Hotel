@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import Room from "../models/Rooms";
+import {RoomDetails, Room} from "../models/Rooms";
 
 export const getAllRooms = async (req: Request, res: Response): Promise<void> => {
   try {
-    //const rooms = await Room.find().populate("details").populate("pictures");
-    const rooms = await Room.find();
+    const rooms = await Room.find().populate("details");
+    //const rooms = await Room.find();
     res.json(rooms);
   } catch (error) {
     console.error("Error fetching all rooms:", error);
@@ -21,8 +21,8 @@ export const getRoomById = async (req: Request, res: Response): Promise<void> =>
       return;
     }
     
-    //const room = await Room.findById(id).populate("details").populate("pictures");
-    const room = await Room.findById(id);
+    const room = await Room.findById(id).populate("details");
+    //const room = await Room.findById(id);
 
     if (!room) {
       res.status(404).json({ message: "Room not found" });
@@ -59,4 +59,32 @@ export const createRoom = async (req: Request, res: Response): Promise<void> => 
       res.status(500).json({ error: "Failed to create room" });
     }
   };
+
+export const getAllRoomsDetials = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const rooms = await RoomDetails.find();
+
+        res.status(200).json({ message: 'Room Details retrieved successfully', rooms });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+export const getRoomsDetials = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+    
+        if (!id) {
+        res.status(400).json({ error: "Room Detail ID is required" });
+        return;
+        }
+        const rooms = await RoomDetails.findById(id);
+
+        res.status(200).json({ message: 'Room Details retrieved successfully', rooms });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
   

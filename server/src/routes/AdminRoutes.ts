@@ -12,7 +12,6 @@ import {
 import { 
     createRoomDetails,
     deleteRoomDetails, 
-    getAllRoomsDetials, 
     updateRoomDetails 
 } from '../controllers/AdminController';
 
@@ -29,7 +28,6 @@ router.post('/login', loginAdminUser);
 // Room Routes
 router.put('/room-details/update/:roomId', updateRoomDetails);
 router.delete('/room-details/delete/:roomId', deleteRoomDetails);
-router.get('/room-details/all', getAllRoomsDetials);
 router.post('/room-details/create', createRoomDetails);
 
 export default router;
