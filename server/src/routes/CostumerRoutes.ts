@@ -1,5 +1,12 @@
 import express from 'express';
-import { registerCostumerUser, loginCostumerUser, selectCategory } from '../controllers/CostumerController';
+import { 
+    registerCostumerUser,
+    loginCostumerUser, 
+    selectCategory,
+    bookReservation,
+    getBookings,
+    getBookingById
+} from '../controllers/CostumerController';
 
 const router = express.Router();
 
@@ -11,6 +18,10 @@ router.post('/login', loginCostumerUser);
 
 // ✅ Select an existing category (User ID required)
 router.post('/categories/book-selected', selectCategory);
+
+router.post('/bookings', bookReservation);
+router.get('/bookings', getBookings);
+router.get('/bookings/:id', getBookingById);
 
 
 

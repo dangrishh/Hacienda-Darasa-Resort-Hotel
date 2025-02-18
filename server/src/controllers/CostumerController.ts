@@ -5,11 +5,12 @@ import mongoose from 'mongoose';
 import CostumerUser from '../models/CostumerUsers';
 import { AdminUsers } from '../models/AdminUsers';
 import {RoomDetails} from '../models/Rooms';
+import {Booking} from '../models/Bookings';
 
 
 // Register Controller
 export const registerCostumerUser = async (req: Request, res: Response): Promise<void> => {
-    const { fullname, facebookLink, email, contactNumber, password } = req.body;
+    const { fullname, email, contactNumber, password } = req.body;
 
     try {
         // Check if the user already exists
@@ -25,7 +26,6 @@ export const registerCostumerUser = async (req: Request, res: Response): Promise
         // Create new user
         const newUser = new CostumerUser({
             fullname,
-            facebookLink,
             email,
             contactNumber,
             password: hashedPassword,
@@ -104,5 +104,83 @@ export const selectCategory = async (req: Request, res: Response): Promise<void>
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+export const bookReservation = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { user, room, name, contactNumber, email, checkInDate, checkOutDate, numOfGuests, totalPrice } = req.body;
+  
+      if (!user || !room || !name || !contactNumber || !email || !checkInDate || !checkOutDate || !numOfGuests || !totalPrice) {
+        res.status(400).json({ error: "All fields are required" });
+        return;
+      }
+  
+      const newBooking = new Booking({
+        user,
+        room,
+        name,
+        contactNumber,
+        email,
+        checkInDate,
+        checkOutDate,
+        numOfGuests,
+        totalPrice,
+        bookStatus: "pending",
+        paymentStatus: "pending",
+      });
+  
+      await newBooking.save();
+      res.status(201).json({ message: "Booking successful!", data: newBooking });
+  
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      res.status(500).json({ error: "Failed to create booking" });
+    }
+  };
+
+  export const getBookings = async (req: Request, res: Response): Promise<void> => {
+    try {
+        // Fetch all bookings with user, room, and room details populated
+        const bookings = await Booking.find();
+
+        res.status(200).json({ bookings });
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        res.status(500).json({ success: false, error: "Failed to fetch bookings" });
+    }
+};
+
+export const getBookingById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        // Validate the booking ID
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            res.status(400).json({ success: false, error: "Invalid booking ID format" });
+            return;
+        }
+
+        // Fetch the booking with populated details
+        const booking = await Booking.findById(id)
+        .populate({
+            path: "user",
+            model: "CustomerUser", // ✅ Ensure this matches your model
+            select: "fullname email contactNumber"
+        })
+        .populate({
+            path: "room",
+            populate: { path: "details" }
+        });
+
+        if (!booking) {
+            res.status(404).json({ success: false, error: "Booking not found" });
+            return;
+        }
+
+        res.status(200).json({ success: true, data: booking });
+    } catch (error) {
+        console.error("Error fetching booking:", error);
+        res.status(500).json({ success: false, error: "Failed to fetch booking" });
     }
 };
