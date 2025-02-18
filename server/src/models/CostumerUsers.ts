@@ -1,23 +1,17 @@
-// src/models/User.ts
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 interface ICostumerUsers extends Document {
   fullname: string;
-  facebookLink: string;
   email: string;
-  contactNumber: string;
   password: string;
+  selectedCategory?: Types.ObjectId; 
 }
 
-const CostumerUsersSchema: Schema = new Schema(
-  {
-    fullname: { type: String, required: true },
-    facebookLink: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    contactNumber: { type: String, required: true },
-    password: { type: String, required: true },
-  },
-  { timestamps: true }
-);
+const CostumerUserSchema: Schema = new Schema({
+  fullname: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  selectedCategory: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+});
 
-export default mongoose.model<ICostumerUsers>('ClientUsers', CostumerUsersSchema);
+export default mongoose.model<ICostumerUsers>('ClientUsers', CostumerUserSchema);
