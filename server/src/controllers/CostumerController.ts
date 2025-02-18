@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import CostumerUser from '../models/CostumerUsers';
-import { AdminUsers, RoomDetails } from '../models/AdminUsers';
+import { AdminUsers } from '../models/AdminUsers';
+import {RoomDetails} from '../models/Rooms';
 
 
 // Register Controller

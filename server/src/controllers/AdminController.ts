@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { AdminUsers, RoomDetails } from '../models/AdminUsers';
+import { AdminUsers } from '../models/AdminUsers';
+import {RoomDetails} from '../models/Rooms';
 import uploadRooms from '../middleware/uploadRooms'; 
 
 // Register Controller
@@ -142,17 +143,6 @@ export const deleteRoomDetails = async (req: Request, res: Response): Promise<vo
         }
 
         res.status(200).json({ message: 'Room Details deleted successfully' });
-    } catch (error) {
-        console.error('Server error:', error);
-        res.status(500).json({ message: 'Server error', error });
-    }
-};
-
-export const getAllRoomsDetials = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const rooms = await RoomDetails.find();
-
-        res.status(200).json({ message: 'Room Details retrieved successfully', rooms });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error });
