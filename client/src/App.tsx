@@ -3,14 +3,14 @@ import "./styles.css";
 
 import Hero from '../src/Landingpage/Hero'
 import Navbar from './Landingpage/Navbar'
-import Login from './Landingpage/Login'
+import LoginComponent from './Landingpage/LoginComponent'
 import Booknow from './Landingpage/Booknow'
 
 const App: React.FC = () => {
   return (
     <div className="">
       <Booknow/>
-    <Login/>
+    <LoginComponent/>
      <Navbar/>
      <Hero/>
     
