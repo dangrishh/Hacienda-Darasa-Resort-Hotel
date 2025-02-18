@@ -1,8 +1,14 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
 import { AdminUsers, RoomDetails } from '../models/AdminUsers';
-import uploadRooms from '../middleware/uploadRooms'; 
+import { Cottages } from '../models/Cottages';
+import { EventHall } from '../models/EventHall';
+import { DayTourRates } from '../models/DayTourRates';
+import { SwimRate } from '../models/SwimRates'; // Import Schema
+
+import upload from '../middleware/uploadMiddleware'; // Import Multer middleware
 
 // Register Controller
 export const registerAdminUser = async (req: Request, res: Response): Promise<void> => {
@@ -158,3 +164,123 @@ export const getAllRoomsDetials = async (req: Request, res: Response): Promise<v
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+export const createEventHall = async (req: Request, res: Response): Promise<void> => {
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: err.message });
+      }
+  
+      try {
+        const { name, quantity, capacity, rate } = req.body;
+        const imagePaths = req.files 
+          ? (req.files as Express.Multer.File[]).map(file => `public/uploads/${file.filename}`)
+          : [];
+  
+        const newEventHall = new EventHall({
+          name,
+          quantity,
+          capacity,
+          rate,
+          images: imagePaths,
+        });
+  
+        await newEventHall.save();
+  
+        res.status(201).json({ message: 'Event Hall added successfully', eventHall: newEventHall });
+      } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error });
+      }
+    });
+  };
+
+export const createDayTourRate = async (req: Request, res: Response): Promise<void> => {
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: err.message });
+      }
+  
+      try {
+        const { roomType, price } = req.body;
+        const imagePaths = req.files 
+          ? (req.files as Express.Multer.File[]).map(file => `public/uploads/${file.filename}`)
+          : [];
+  
+        const newDayTourRate = new DayTourRates({
+          roomType,
+          price,
+          images: imagePaths,
+        });
+  
+        await newDayTourRate.save();
+  
+        res.status(201).json({ message: 'Day Tour Rate added successfully', dayTourRate: newDayTourRate });
+      } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error });
+      }
+    });
+  };
+
+  export const createCottage = async (req: Request, res: Response): Promise<void> => {
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: err.message });
+      }
+
+      try {
+        const { name, quantity, price } = req.body;
+
+        // ✅ Store only relative paths, removing local directory details
+        const imagePaths = req.files 
+          ? (req.files as Express.Multer.File[]).map(file => `public/uploads/${file.filename}`)
+          : [];
+
+        const newCottage = new Cottages({
+          name,
+          quantity,
+          price,
+          images: imagePaths,
+        });
+
+        await newCottage.save();
+
+        res.status(201).json({ message: 'Cottage added successfully', cottage: newCottage });
+      } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error });
+      }
+    });
+};
+
+export const createSwimRate = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { type, startDate, startTime, endTime, rates, minPax } = req.body;
+  
+      if (!type || !startDate || !startTime || !endTime || !rates) {
+         res.status(400).json({ message: 'Missing required fields' });
+         return
+      }
+
+      const imagePaths = req.files 
+      ? (req.files as Express.Multer.File[]).map(file => `public/uploads/${file.filename}`)
+      : [];
+  
+      const newSwimRate = new SwimRate({
+        type,
+        startDate: new Date(startDate), // Convert to Date object
+        startTime, // Store as HH:MM string
+        endTime, // Store as HH:MM string
+        rates,
+        images: imagePaths,
+        minPax: type === 'night' ? minPax : undefined, // Only for night swim
+      });
+  
+      await newSwimRate.save();
+      res.status(201).json({ message: 'Swim rate added successfully', swimRate: newSwimRate });
+    } catch (error) {
+      console.error('Server error:', error);
+      res.status(500).json({ message: 'Server error', error });
+    }
+  };
