@@ -2,7 +2,8 @@ import express from 'express';
 import { 
     registerStaffUser, 
     loginStaffUser,
-    updatePaymentStatus
+    updatePaymentStatus,
+    updateBookingStatus
  } from '../controllers/StaffController';
 
 const router = express.Router();
@@ -14,5 +15,7 @@ router.post('/register', registerStaffUser);
 router.post('/login', loginStaffUser);
 
 router.put('/bookings/:bookingId/payment-status', updatePaymentStatus);
+router.put('/bookings/update-status/:bookingId', updateBookingStatus);
+
 
 export default router;

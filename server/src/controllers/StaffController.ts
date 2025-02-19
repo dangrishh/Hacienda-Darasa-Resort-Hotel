@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import UserStaff from '../models/StaffUsers';
 import mongoose from 'mongoose';
 import { Booking } from '../models/Bookings';
+import {Room} from '../models/Rooms';
 
 // Register Controller
 export const registerStaffUser = async (req: Request, res: Response): Promise<void> => {
@@ -104,5 +105,63 @@ export const updatePaymentStatus = async (req: Request, res: Response): Promise<
     } catch (error) {
       console.error("Error updating payment status:", error);
       res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  };
+
+  export const updateBookingStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { bookingId } = req.params;
+  
+      // Find the booking
+      const booking = await Booking.findById(bookingId);
+      if (!booking) {
+        res.status(404).json({ message: "Booking not found" });
+        return;
+      }
+  
+      // Check if payment is completed
+      if (booking.paymentStatus !== "paid") {
+        res.status(400).json({ message: "Payment must be completed first" });
+        return;
+      }
+  
+      const currentDate = new Date();
+  
+      // Determine booking status
+      let newStatus: "pending" | "confirmed" | "canceled" | "completed" | "ongoing" = "pending";
+      
+      if (currentDate >= booking.checkInDate && currentDate <= booking.checkOutDate) {
+        newStatus = "ongoing";
+      } else if (currentDate > booking.checkOutDate) {
+        newStatus = "completed";
+      } else {
+        newStatus = "confirmed"; // Future bookings with payment complete
+      }
+  
+      // Update booking
+      booking.bookStatus = newStatus;
+      await booking.save();
+  
+      // Update room status if applicable
+      if (newStatus === "ongoing") {
+        await Room.findByIdAndUpdate(booking.room, {
+          booked: true,
+          bookedBy: booking.user,
+          bookingStartTime: booking.checkInDate,
+          bookingEndTime: booking.checkOutDate,
+        });
+      } else if (newStatus === "completed") {
+        await Room.findByIdAndUpdate(booking.room, {
+          booked: false,
+          bookedBy: null,
+          bookingStartTime: null,
+          bookingEndTime: null,
+        });
+      }
+  
+      res.status(200).json({ message: "Booking status updated", booking });
+    } catch (error) {
+      console.error("Error updating booking status:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   };
