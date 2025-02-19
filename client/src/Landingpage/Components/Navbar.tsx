@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import Logo from "../assets/img/Logo.png";
+import Logo from "../../assets/img/Logo.png";
 
 const ResortName: React.CSSProperties = {
   fontFamily: "'Poppins', serif",

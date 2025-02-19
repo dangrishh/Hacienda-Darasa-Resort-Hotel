@@ -1,5 +1,6 @@
+import React from "react";
 
-import { Button, Stack } from "@mui/material"; 
+import { Button } from "@mui/material"; 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { styled } from "@mui/material/styles";
 
@@ -27,7 +28,7 @@ height: '90px',
   },
 });
 
-const BookNowButton = () => {
+const BookNowButton: React.FC = () => {
   return (
     
       <GradientButton endIcon={<ArrowForwardIcon />}>Book Now</GradientButton>

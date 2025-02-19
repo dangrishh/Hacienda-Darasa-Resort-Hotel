@@ -1,19 +1,22 @@
 import React from "react";
 import "./styles.css";
+import { Routes, Route } from 'react-router-dom';
 
-import Hero from '../src/Landingpage/Hero'
-import Navbar from './Landingpage/Navbar'
-import LoginComponent from './Landingpage/LoginComponent'
-import Booknow from './Landingpage/Booknow'
-
+import Guest from './Routes/Guest'
+import Login from '../src/LoginComponent'
 const App: React.FC = () => {
   return (
     <div className="">
-      <Booknow/>
-    <LoginComponent/>
-     <Navbar/>
-     <Hero/>
-    
+
+           
+           <Routes>
+   
+             {/* Student and Advicer */}
+             <Route path="/" element={<Guest/>} />
+             <Route path="/Login" element={<Login/>} />
+   
+           </Routes>
+      
     </div>
     
   );

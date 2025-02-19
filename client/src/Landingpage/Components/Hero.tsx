@@ -1,8 +1,8 @@
 import React from "react";
 
-import sampleImage from "../assets/img/bg.jpg"; // Import image
+import sampleImage from "../../assets/img/main-page.jpg"; // Import image
 
-const App: React.FC = () => {
+const Hero: React.FC = () => {
   return (
     <div className="h-[2000px]">
       <div>
@@ -18,4 +18,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Hero;
