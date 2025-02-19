@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserStaff from '../models/StaffUsers';
+import mongoose from 'mongoose';
+import { Booking } from '../models/Bookings';
 
 // Register Controller
 export const registerStaffUser = async (req: Request, res: Response): Promise<void> => {
@@ -69,3 +71,38 @@ export const loginStaffUser = async (req: Request, res: Response): Promise<void>
         res.status(500).json({ message: 'Error logging in', error: err });
     }
 };
+
+export const updatePaymentStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { bookingId } = req.params; // Get booking ID from URL
+      const { paymentStatus } = req.body; // Get new status from request body
+  
+      // Validate input
+      if (!["paid", "failed"].includes(paymentStatus)) {
+        res.status(400).json({ success: false, error: "Invalid payment status" });
+        return;
+      }
+  
+      // Find and update booking
+      const updatedBooking = await Booking.findByIdAndUpdate(
+        bookingId,
+        { paymentStatus },
+        { new: true } // Return updated document
+      );
+  
+      if (!updatedBooking) {
+        res.status(404).json({ success: false, error: "Booking not found" });
+        return;
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: "Payment status updated",
+        data: updatedBooking,
+      });
+  
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  };
