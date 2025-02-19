@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import CustomerUser from '../models/CostumerUsers';
 
 interface IRoom {
   name: string;
@@ -33,7 +34,7 @@ const RoomSchema: Schema = new Schema(
     name: { type: String, required: true },
     details: { type: Schema.Types.ObjectId, ref: "RoomDetails", required: true },
     booked: { type: Boolean, default: false },
-    bookedBy: { type: Schema.Types.ObjectId, ref: "User", default: null },
+    bookedBy: { type: Schema.Types.ObjectId, ref: "CustomerUser", default: null },
     bookingStartTime: { type: Date, default: null },
     bookingEndTime: { type: Date, default: null },
     pictures: [{ type: Schema.Types.ObjectId, ref: "Picture", default: null }],

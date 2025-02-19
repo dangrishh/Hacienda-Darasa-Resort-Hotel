@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserStaff from '../models/StaffUsers';
+import mongoose from 'mongoose';
+import { Booking } from '../models/Bookings';
+import {Room} from '../models/Rooms';
 
 // Register Controller
 export const registerStaffUser = async (req: Request, res: Response): Promise<void> => {

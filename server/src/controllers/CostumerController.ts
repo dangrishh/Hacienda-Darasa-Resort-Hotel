@@ -5,11 +5,12 @@ import mongoose from 'mongoose';
 import CostumerUser from '../models/CostumerUsers';
 import { AdminUsers } from '../models/AdminUsers';
 import {RoomDetails} from '../models/Rooms';
+import {Booking} from '../models/Bookings';
 
 
 // Register Controller
 export const registerCostumerUser = async (req: Request, res: Response): Promise<void> => {
-    const { fullname, facebookLink, email, contactNumber, password } = req.body;
+    const { fullname, email, contactNumber, password } = req.body;
 
     try {
         // Check if the user already exists
@@ -25,7 +26,6 @@ export const registerCostumerUser = async (req: Request, res: Response): Promise
         // Create new user
         const newUser = new CostumerUser({
             fullname,
-            facebookLink,
             email,
             contactNumber,
             password: hashedPassword,
