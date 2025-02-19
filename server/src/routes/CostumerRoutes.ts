@@ -2,11 +2,15 @@ import express from 'express';
 import { 
     registerCostumerUser,
     loginCostumerUser, 
-    selectCategory,
+    selectCategory
+} from '../controllers/CostumerController';
+
+import {
     bookReservation,
     getBookings,
-    getBookingById
-} from '../controllers/CostumerController';
+    getBookingById,
+    getBookingPrice
+} from '../controllers/BookingController';
 
 const router = express.Router();
 
@@ -22,6 +26,7 @@ router.post('/categories/book-selected', selectCategory);
 router.post('/bookings', bookReservation);
 router.get('/bookings', getBookings);
 router.get('/bookings/:id', getBookingById);
+router.get('/bookings/:bookingId/price', getBookingPrice);
 
 
 

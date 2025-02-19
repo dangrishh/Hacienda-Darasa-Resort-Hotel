@@ -1,10 +1,12 @@
 import express from 'express';
 import { 
     registerStaffUser, 
-    loginStaffUser,
+    loginStaffUser
+ } from '../controllers/StaffController';
+import {
     updatePaymentStatus,
     updateBookingStatus
- } from '../controllers/StaffController';
+} from '../controllers/BookingController';
 
 const router = express.Router();
 
