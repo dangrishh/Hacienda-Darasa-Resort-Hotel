@@ -24,7 +24,7 @@ export const registerAdminUser = async (req: Request, res: Response): Promise<vo
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-
+                                                                  
         // Create new user
         const newUser = new AdminUsers({
             fullname,
