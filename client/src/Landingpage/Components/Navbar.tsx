@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../assets/img/Logo.png";
 
+
 const ResortName: React.CSSProperties = {
   fontFamily: "'Poppins', serif",
   fontWeight: "300",
@@ -47,7 +48,7 @@ const Navbar: React.FC = () => {
               to="/contact"
               className={({ isActive }) =>
                 `no-underline transition duration-200 ${
-                  isActive ? "font-bold" : "font-normal"
+                  isActive ? "font-bold" : "font-normal"  
                 }`
               }
             >
