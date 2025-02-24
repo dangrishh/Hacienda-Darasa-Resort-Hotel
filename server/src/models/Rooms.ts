@@ -4,7 +4,7 @@ import CustomerUser from '../models/CostumerUsers';
 interface IRoom {
   name: string;
   details: mongoose.Types.ObjectId;
-  booked: boolean;
+  booked: "free" | "occupied" | "reserved";
   bookedBy?: mongoose.Types.ObjectId | null;
   bookingStartTime?: Date | null;
   bookingEndTime?: Date | null;
@@ -33,7 +33,11 @@ const RoomSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     details: { type: Schema.Types.ObjectId, ref: "RoomDetails", required: true },
-    booked: { type: Boolean, default: false },
+    booked: { 
+      type: String, 
+      enum: ["free", "occupied", "reserved"],  // ✅ Enforcing allowed values
+      default: "free"  // ✅ Default value
+    },
     bookedBy: { type: Schema.Types.ObjectId, ref: "CustomerUser", default: null },
     bookingStartTime: { type: Date, default: null },
     bookingEndTime: { type: Date, default: null },

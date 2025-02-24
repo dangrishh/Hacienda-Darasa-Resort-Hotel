@@ -49,7 +49,7 @@ export const createRoom = async (req: Request, res: Response): Promise<void> => 
         name,
         details,
         pictures: pictures || null,
-        booked: false,
+        booked: "free",
       });
       
       await newRoom.save();
