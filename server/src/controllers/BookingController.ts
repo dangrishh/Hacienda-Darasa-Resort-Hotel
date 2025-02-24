@@ -7,36 +7,52 @@ import { Booking } from '../models/Bookings';
 import {Room} from '../models/Rooms';
 
 export const bookReservation = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { user, room, name, contactNumber, email, checkInDate, checkOutDate, numOfGuests, totalPrice } = req.body;
-  
-      if (!user || !room || !name || !contactNumber || !email || !checkInDate || !checkOutDate || !numOfGuests || !totalPrice) {
-        res.status(400).json({ error: "All fields are required" });
-        return;
-      }
-  
-      const newBooking = new Booking({
-        user,
-        room,
-        name,
-        contactNumber,
-        email,
-        checkInDate,
-        checkOutDate,
-        numOfGuests,
-        totalPrice,
-        bookStatus: "pending",
-        paymentStatus: "pending",
-      });
-  
-      await newBooking.save();
-      res.status(201).json({ message: "Booking successful!", data: newBooking });
-  
-    } catch (error) {
-      console.error("Error creating booking:", error);
-      res.status(500).json({ error: "Failed to create booking" });
+  try {
+    const { user, room, name, contactNumber, email, checkInDate, checkOutDate, numOfGuests, totalPrice } = req.body;
+
+    // ✅ Validate required fields
+    if (!user || !room || !name || !contactNumber || !email || !checkInDate || !checkOutDate || !numOfGuests || !totalPrice) {
+      res.status(400).json({ error: "All fields are required" });
+      return;
     }
-  };
+
+    // ✅ Check if the room exists
+    const existingRoom = await Room.findById(room);
+    if (!existingRoom) {
+      res.status(404).json({ error: "Room not found" });
+      return;
+    }
+
+    // ✅ Check if the room is available (free)
+    if (existingRoom.booked !== "free") {
+      res.status(400).json({ error: "Room is not available for booking" });
+      return;
+    }
+
+    // ✅ Proceed with booking
+    const newBooking = new Booking({
+      user,
+      room,
+      name,
+      contactNumber,
+      email,
+      checkInDate,
+      checkOutDate,
+      numOfGuests,
+      totalPrice,
+      bookStatus: "pending",
+      paymentStatus: "pending",
+    });
+
+    await newBooking.save();
+
+    res.status(201).json({ message: "Booking successful!", data: newBooking });
+
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    res.status(500).json({ error: "Failed to create booking" });
+  }
+};
 
   export const getBookings = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -152,24 +168,39 @@ export const updatePaymentStatus = async (req: Request, res: Response): Promise<
       // Update booking
       booking.bookStatus = newStatus;
       await booking.save();
+
+      // ✅ Find the room before updating
+      const room = await Room.findById(booking.room);
+      if (!room) {
+        res.status(404).json({ message: "Associated room not found" });
+        return;
+      }
   
       // Update room status if applicable
       if (newStatus === "ongoing") {
         await Room.findByIdAndUpdate(booking.room, {
-          booked: true,
+          booked: "occupied",
           bookedBy: booking.user,
           bookingStartTime: booking.checkInDate,
           bookingEndTime: booking.checkOutDate,
         });
-      } else if (newStatus === "completed") {
+      } 
+      else if (newStatus === "confirmed") {
         await Room.findByIdAndUpdate(booking.room, {
-          booked: false,
+          booked: "reserved",
           bookedBy: null,
           bookingStartTime: null,
           bookingEndTime: null,
         });
       }
-  
+      else if (newStatus === "completed") {
+        await Room.findByIdAndUpdate(booking.room, {
+          booked: "free",
+          bookedBy: null,
+          bookingStartTime: null,
+          bookingEndTime: null,
+        });
+      }
       res.status(200).json({ message: "Booking status updated", booking });
     } catch (error) {
       console.error("Error updating booking status:", error);

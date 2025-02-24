@@ -36,7 +36,6 @@ const RoomSchema: Schema = new Schema(
     booked: { 
       type: String, 
       enum: ["free", "occupied", "reserved"],  // ✅ Enforcing allowed values
-      default: "free"  // ✅ Default value
     },
     bookedBy: { type: Schema.Types.ObjectId, ref: "CustomerUser", default: null },
     bookingStartTime: { type: Date, default: null },
