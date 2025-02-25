@@ -5,8 +5,13 @@ import {
     getAllRooms, 
     getRoomById, 
     getAllRoomsDetials, 
-    getRoomsDetials
+    getRoomsDetials,
+    updateRoom,
+    deleteRoom,
+    getRoomsByStatus
 } from "../controllers/RoomsController";
+
+
 
 const router = express.Router();
 
@@ -16,5 +21,11 @@ router.get("/rooms/:id", getRoomById);
 
 router.get('/room-details', getAllRoomsDetials);
 router.get('/room-details/:id', getRoomsDetials);
+
+router.put("/updateRoom/:id", updateRoom);
+router.delete("/deleteRoom/:id", deleteRoom);
+
+
+router.get("/filtering-by-status", getRoomsByStatus);
 
 export default router;

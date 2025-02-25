@@ -36,6 +36,35 @@ export const getRoomById = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
+// get ( filtering by status)
+
+export const getRoomsByStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+
+    const { status } = req.query; // Get the status from query parameters
+
+    // Check if status is valid (optional validation)
+    const allowedStatuses = ["free", "occupied", "reserved"];
+    if (status && !allowedStatuses.includes(status as string)) {
+      res.status(400).json({ error: "Invalid status. Allowed values: free, occupied, reserved" });
+      return;
+    }
+
+    // Query based on the status
+    const filter = status ? { booked: status } : {}; // If status is provided, filter by it
+
+    const rooms = await Room.find(filter).populate("bookedBy");
+
+    // const rooms = await Room.find(filter).populate("details bookedBy pictures");
+
+    res.status(200).json({ message: "Rooms retrieved successfully", data: rooms });
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    res.status(500).json({ error: "Failed to fetch rooms" });
+  }
+};
+
+
 export const createRoom = async (req: Request, res: Response): Promise<void> => {
     try {
       const { name, details, pictures } = req.body;
@@ -57,6 +86,55 @@ export const createRoom = async (req: Request, res: Response): Promise<void> => 
     } catch (error) {
       console.error("Error creating room:", error);
       res.status(500).json({ error: "Failed to create room" });
+    }
+  };
+
+  export const updateRoom = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { name, details, booked, bookedBy, bookingStartTime, bookingEndTime, pictures } = req.body;
+  
+      const updatedRoom = await Room.findByIdAndUpdate(
+        id,
+        {
+          name,
+          details,
+          booked,
+          bookedBy,
+          bookingStartTime,
+          bookingEndTime,
+          pictures,
+        },
+        { new: true, runValidators: true } // Returns the updated document and ensures validation
+      );
+  
+      if (!updatedRoom) {
+        res.status(404).json({ error: "Room not found" });
+        return;
+      }
+  
+      res.status(200).json({ message: "Room updated successfully", data: updatedRoom });
+    } catch (error) {
+      console.error("Error updating room:", error);
+      res.status(500).json({ error: "Failed to update room" });
+    }
+  };
+
+  export const deleteRoom = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+  
+      const deletedRoom = await Room.findByIdAndDelete(id);
+  
+      if (!deletedRoom) {
+        res.status(404).json({ error: "Room not found" });
+        return;
+      }
+  
+      res.status(200).json({ message: "Room deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting room:", error);
+      res.status(500).json({ error: "Failed to delete room" });
     }
   };
 
