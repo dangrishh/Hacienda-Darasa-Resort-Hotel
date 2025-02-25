@@ -1,6 +1,6 @@
 // src/models/Inquiry.ts
 import mongoose, { Schema, Document } from 'mongoose';
-import CustomerUser from '../models/CostumerUsers';
+import {CostumerUser} from '../models/CostumerUsers';
 
 export interface IInquiry extends Document {
   fullName: string;

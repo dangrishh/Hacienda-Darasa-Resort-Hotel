@@ -4,14 +4,14 @@ import jwt from 'jsonwebtoken';
 import UserStaff from '../models/StaffUsers';
 import mongoose from 'mongoose';
 import { Booking } from '../models/Bookings';
-import {Room} from '../models/Rooms';
+import {Room, RoomDetails, IRoomDetails} from '../models/Rooms';
 
 export const bookReservation = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { user, room, name, contactNumber, email, checkInDate, checkOutDate, numOfGuests, totalPrice } = req.body;
+    const { user, room, name, contactNumber, email, checkInDate, checkOutDate, numOfGuests } = req.body;
 
     // ✅ Validate required fields
-    if (!user || !room || !name || !contactNumber || !email || !checkInDate || !checkOutDate || !numOfGuests || !totalPrice) {
+    if (!user || !room || !name || !contactNumber || !email || !checkInDate || !checkOutDate || !numOfGuests) {
       res.status(400).json({ error: "All fields are required" });
       return;
     }
@@ -28,7 +28,32 @@ export const bookReservation = async (req: Request, res: Response): Promise<void
       res.status(400).json({ error: "Room is not available for booking" });
       return;
     }
+    
 
+    const roomdetails = await Room.findById(room).populate<{ details: IRoomDetails }>("details");
+
+    // Assuming `rates` is an array, get the first rate object
+    const firstRate = roomdetails?.details?.rates[0]; 
+    const extraCharge = roomdetails?.details?.extraPersonCharge ?? 0;
+    const price = firstRate?.price ?? 0;
+    const maxPersons = firstRate?.maxPersons ?? 0;
+    let totalPrice = 0;
+
+    if (numOfGuests <= maxPersons)
+    {
+        totalPrice = price;
+    }
+    else 
+    {
+        const extraGuests = numOfGuests - maxPersons;
+        totalPrice = (extraGuests * extraCharge) + price;
+    }
+
+    res.status(201).json({ message: "Booking successful!", NumofGuest: numOfGuests, Price: price, MaxPersons: maxPersons, ExtraCharge: extraCharge, TotalPrice: totalPrice });
+
+
+
+    /*
     // ✅ Proceed with booking
     const newBooking = new Booking({
       user,
@@ -47,7 +72,7 @@ export const bookReservation = async (req: Request, res: Response): Promise<void
     await newBooking.save();
 
     res.status(201).json({ message: "Booking successful!", data: newBooking });
-
+*/
   } catch (error) {
     console.error("Error creating booking:", error);
     res.status(500).json({ error: "Failed to create booking" });

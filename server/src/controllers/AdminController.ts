@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AdminUsers } from '../models/AdminUsers';
 import {RoomDetails} from '../models/Rooms';
+import {CostumerUser} from '../models/CostumerUsers';
 import uploadRooms from '../middleware/uploadRooms'; 
 
 // Register Controller
@@ -65,6 +66,17 @@ export const loginAdminUser = async (req: Request, res: Response): Promise<void>
         res.status(500).json({ message: 'Error logging in', error: err });
     }
 };
+
+export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const allUsers = await CostumerUser.find();
+        res.json(allUsers);
+    }
+    catch (error) {
+        console.error("Error fetching all users:", error);
+        res.status(500).json({ error: "Failed to fetch all users" });
+    }
+}
 
 export const createRoomDetails = async (req: Request, res: Response): Promise<void> => {
     try {

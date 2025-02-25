@@ -6,6 +6,7 @@ import uploadRooms from '../middleware/uploadRooms'; // ✅ Import middleware
 import { 
     registerAdminUser, 
     loginAdminUser, 
+    getAllUsers
 } from '../controllers/AdminController';
 
 
@@ -29,5 +30,7 @@ router.post('/login', loginAdminUser);
 router.put('/room-details/update/:roomId', updateRoomDetails);
 router.delete('/room-details/delete/:roomId', deleteRoomDetails);
 router.post('/room-details/create', createRoomDetails);
+
+router.get('/getAllUsers', getAllUsers);
 
 export default router;

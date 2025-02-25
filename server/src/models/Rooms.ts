@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import CustomerUser from '../models/CostumerUsers';
+import {CostumerUser} from '../models/CostumerUsers';
 
 interface IRoom {
   name: string;
@@ -17,7 +17,7 @@ interface IRoomRate {
   maxPersons: number; // Maximum allowed persons per rate
 }
 
-interface IRoomDetails extends Document {
+export interface IRoomDetails extends Document {
   name: string;
   rates: IRoomRate[]; // Multiple rate options
   extraPersonCharge: number;
