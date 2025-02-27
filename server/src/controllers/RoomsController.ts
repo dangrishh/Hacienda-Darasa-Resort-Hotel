@@ -1,4 +1,5 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
+
 import {RoomDetails, Room} from "../models/Rooms";
 
 export const getAllRooms = async (req: Request, res: Response): Promise<void> => {
@@ -63,6 +64,48 @@ export const getRoomsByStatus = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ error: "Failed to fetch rooms" });
   }
 };
+
+// get ( filtering by status by ID )
+export const getRoomsByStatusGrouped = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { status } = req.query;
+
+    // Validate input status
+    const allowedStatuses = ["free", "occupied", "reserved"];
+    if (!status || !allowedStatuses.includes(status as string)) {
+      res.status(400).json({ error: "Invalid status. Allowed values: free, occupied, reserved" });
+      return;
+    }
+
+    const rooms = await Room.aggregate([
+      {
+        $match: { booked: status } // Filter rooms by status
+      },
+      {
+        $lookup: {
+          from: "roomdetails", // Match with RoomDetails collection
+          localField: "details",
+          foreignField: "_id",
+          as: "roomDetails"
+        }
+      },
+      { $unwind: "$roomDetails" },
+      {
+        $group: {
+          _id: "$roomDetails.name", // Group by RoomDetails name
+          rooms: { $push: { _id: "$_id", name: "$name" } }
+        }
+      }
+    ]);
+
+    res.status(200).json({ message: "Rooms grouped by status", data: rooms });
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    res.status(500).json({ error: "Failed to fetch rooms" });
+  }
+};
+
+
 
 
 export const createRoom = async (req: Request, res: Response): Promise<void> => {
