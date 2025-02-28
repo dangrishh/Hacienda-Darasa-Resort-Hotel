@@ -1,8 +1,8 @@
 import React from "react";
-import image1 from "../../assets/img/coffee1.png";
-import image2 from "../../assets/img/umbrella1.png";
-import image3 from "../../assets/img/coconut1.png";
-import image4 from "../../assets/img/disco1.png";
+import image1 from "../../../assets/icons/coffee1.png";
+import image2 from "../../../assets/icons/coconut1.png";
+import image3 from "../../../assets/icons/umbrella1.png";
+import image4 from "../../../assets/icons/disco1.png";
 
 const features = [
   {
@@ -38,7 +38,7 @@ const FeaturesSection: React.FC = () => {
         <div className="flex justify-between items-center gap-8">
           {features.map((feature, index) => (
             <div key={index} className="flex flex-col items-center text-center w-1/4">
-              <img src={feature.icon} alt={feature.title} className="mb-4 w-[100px] h-[100px]" />
+              <img src={feature.icon} alt={feature.title} className="mb-4 " />
               <h3 className="text-2xl font-bold text-gray-800">{feature.title}</h3>
               <p className="text-gray-600 max-w-[250px]">{feature.description}</p>
             </div>

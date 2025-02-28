@@ -1,6 +1,6 @@
 import React from "react";
 
-import sampleImage from "../../assets/img/main-page.jpg"; // Import image
+import sampleImage from "../../../assets/images/main-page.jpg"; // Import image
 
 const Hero: React.FC = () => {
   return (

@@ -1,8 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import Logo from "../../assets/img/Logo.png";
+import Logo from "../../../assets/icons/Logo.png";
 
-
+// import LoginButton from '../../../assets/icons/Logo.png'
 const ResortName: React.CSSProperties = {
   fontFamily: "'Poppins', serif",
   fontWeight: "300",
@@ -55,6 +55,11 @@ const Navbar: React.FC = () => {
               About Us
             </NavLink>
           </li>
+
+          <li>
+            {/* <LoginButton/> */}
+          </li>
+
         </ul>
       </div>
     </nav>

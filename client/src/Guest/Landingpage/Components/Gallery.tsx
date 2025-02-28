@@ -1,7 +1,7 @@
 import React from "react";
-import mainPageImage from "/src/assets/img/bg.jpg";
-import cottageImage from "/src/assets/img/main-page.jpg";
-import poolImage from "/src/assets/img/resort.jpg";
+import mainPageImage from "../../../assets/images/main-page.jpg";
+import cottageImage from "../../../assets/images/resort.jpg";
+import poolImage from "../../../assets/images/main-page.jpg";
 
 
 const FamilyResortSection: React.FC = () => {
