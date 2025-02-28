@@ -6,89 +6,129 @@ import mongoose from 'mongoose';
 import { Booking } from '../models/Bookings';
 import {Room, RoomDetails, IRoomDetails} from '../models/Rooms';
 
-export const bookReservation = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { user, room, name, contactNumber, email, checkInDate, checkOutDate, numOfGuests } = req.body;
 
-    // ✅ Validate required fields
-    if (!user || !room || !name || !contactNumber || !email || !checkInDate || !checkOutDate || !numOfGuests) {
+export const bookCustomerReservation = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { user, room, name, contactNumber, email, checkInDate, reservationType, numOfGuests } = req.body;
+
+    if (!user || !room || !name || !contactNumber || !email || !checkInDate || !reservationType || !numOfGuests) {
       res.status(400).json({ error: "All fields are required" });
       return;
     }
 
-    // ✅ Check if the room exists
-    const existingRoom = await Room.findById(room);
+    if (!["12hrs", "22hrs"].includes(reservationType)) {
+      res.status(400).json({ error: "Invalid reservation type for customers" });
+      return;
+    }
+
+    const existingRoom = await Room.findById(room).populate<{ details: IRoomDetails }>("details");
     if (!existingRoom) {
       res.status(404).json({ error: "Room not found" });
       return;
     }
 
-    // ✅ Check if the room is available (free)
     if (existingRoom.booked !== "free") {
       res.status(400).json({ error: "Room is not available for booking" });
       return;
     }
-    
 
-    const roomdetails = await Room.findById(room).populate<{ details: IRoomDetails }>("details");
+    // ✅ Convert check-in date to a Date object
+    const checkIn = new Date(checkInDate);
+    let checkOutDate: Date | null = null;
+    let extraCharge = 0;
 
-    // Assuming `rates` is an array, get the first rate object
-    const firstRate = roomdetails?.details?.rates[0]; 
-    const extraCharge = roomdetails?.details?.extraPersonCharge ?? 0;
-    const price = firstRate?.price ?? 0;
-    const maxPersons = firstRate?.maxPersons ?? 0;
-    let totalPrice = 0;
-
-    if (numOfGuests <= maxPersons)
-    {
-        totalPrice = price;
-    }
-    else 
-    {
-        const extraGuests = numOfGuests - maxPersons;
-        totalPrice = (extraGuests * extraCharge) + price;
+    // ✅ Calculate checkout time normally by adding hours (NO fixed times)
+    if (reservationType === "12hrs") {
+      checkOutDate = new Date(checkIn.getTime() + 12 * 60 * 60 * 1000);
+    } else if (reservationType === "22hrs") {
+      checkOutDate = new Date(checkIn.getTime() + 22 * 60 * 60 * 1000);
     }
 
-    res.status(201).json({ message: "Booking successful!", NumofGuest: numOfGuests, Price: price, MaxPersons: maxPersons, ExtraCharge: extraCharge, TotalPrice: totalPrice });
+    // ✅ Determine if early check-in applies (before 2:00 PM)
+    const standardCheckInTime = new Date(checkIn);
+    standardCheckInTime.setHours(14, 0, 0, 0); // 2:00 PM
 
+    if (checkIn.getHours() < 14) {
+      const extraHourCharge = existingRoom.details?.extraHourCharge[0]; // Get extra charge details
 
+      if (extraHourCharge) {
+        const firstHours = extraHourCharge.firstHours ?? 0; // Allowed extra hours before charge applies
+        const extraHourRate = extraHourCharge.price ?? 0; // Price per extra hour
+
+        // Calculate extra hours (only count hours before 2:00 PM)
+        const extraHours = Math.ceil((standardCheckInTime.getTime() - checkIn.getTime()) / (60 * 60 * 1000));
+
+        // Apply extra hour charge logic
+        if (extraHours > firstHours) {
+          extraCharge = extraHours * extraHourRate;
+        } else {
+          extraCharge = extraHourRate;
+        }
+      }
+    }
+
+    let roomPrice = 0;
+
+    for (let i = 0; i < existingRoom.details.rates.length; i++)
+    {
+      if (existingRoom.details.rates[i].duration == reservationType)
+      {
+        roomPrice = existingRoom.details.rates[i].price;
+      }
+    }
+
+    // ✅ Calculate total price with extra charges
+    const totalPrice = roomPrice + extraCharge;
 
     /*
-    // ✅ Proceed with booking
+    // ✅ Save booking to database (example schema)
     const newBooking = new Booking({
       user,
       room,
       name,
       contactNumber,
       email,
-      checkInDate,
+      checkInDate: checkIn,
       checkOutDate,
+      reservationType,
       numOfGuests,
       totalPrice,
-      bookStatus: "pending",
-      paymentStatus: "pending",
+      extraCharge: extraCharge > 0 ? `Extra charge: ${extraCharge}` : "No extra charge",
+      bookStatus: "pending"
     });
 
     await newBooking.save();
+    */
 
-    res.status(201).json({ message: "Booking successful!", data: newBooking });
-*/
+
+    res.status(201).json({
+      message: "Booking successful!",
+      ReservationType: reservationType,
+      CheckIn: checkIn,
+      CheckOut: checkOutDate,
+      TotalPrice: totalPrice,
+      ExtraCharge: extraCharge > 0 ? `Extra charge: ${extraCharge}` : "No extra charge",
+      BookStatus: "pending"
+    });
+
   } catch (error) {
-    console.error("Error creating booking:", error);
-    res.status(500).json({ error: "Failed to create booking" });
+    console.error("Booking error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-  export const getBookings = async (req: Request, res: Response): Promise<void> => {
-    try {
-        // Fetch all bookings with user, room, and room details populated
-        const bookings = await Booking.find();
 
-        res.status(200).json({ bookings });
-    } catch (error) {
-        console.error("Error fetching bookings:", error);
-        res.status(500).json({ success: false, error: "Failed to fetch bookings" });
-    }
+
+export const getBookings = async (req: Request, res: Response): Promise<void> => {
+  try {
+      // Fetch all bookings with user, room, and room details populated
+      const bookings = await Booking.find();
+
+      res.status(200).json({ bookings });
+  } catch (error) {
+      console.error("Error fetching bookings:", error);
+      res.status(500).json({ success: false, error: "Failed to fetch bookings" });
+  }
 };
 
 export const getBookingById = async (req: Request, res: Response): Promise<void> => {
