@@ -19,6 +19,8 @@ const Navbar: React.FC = () => {
         </h1>
 
         <ul className="text-white flex gap-[100px] list-none text-[25px]">
+        
+          
           <li>
             <NavLink
               to="/about"
@@ -54,7 +56,9 @@ const Navbar: React.FC = () => {
             >
               About Us
             </NavLink>
+            
           </li>
+          
         </ul>
       </div>
     </nav>

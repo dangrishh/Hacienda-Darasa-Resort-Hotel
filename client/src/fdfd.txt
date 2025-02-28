@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Cafe Luntian</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            background: url('background.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 5%;
+        }
+
+        .content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #ff7f27;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            width: 150px;
+        }
+
+        footer {
+            width: 100%;
+            background: #2e2e2e;
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .footer-content div {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .footer-content h3 {
+            margin-bottom: 10px;
+        }
+
+        .footer-content a {
+            color: #ff7f27;
+            text-decoration: none;
+        }
+
+        .footer-icon {
+            position: absolute;
+            bottom: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        .left-icon {
+            left: 10px;
+        }
+
+        .right-icon {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="content">
+            <img src="logo.jpg" alt="Cafe Luntian Logo" class="logo">
+            <h1>CAFE LUNTIAN</h1>
+            <a href="#" class="btn">Go to page →</a>
+        </div>
+    </div>
+
+    <footer>
+        <img src="left-icon.png" alt="Left Icon" class="footer-icon left-icon">
+        <div class="footer-content">
+            <div class="social">
+                <h3>Social Media Links</h3>
+                <p>Darasa Tanauan</p>
+                <p><a href="#">www.fbsample.com</a></p>
+                <p><a href="#">www.instagramsample.com</a></p>
+            </div>
+            <div class="contact">
+                <h3>Contacts</h3>
+                <p>📞 0912-5932-523</p>
+                <p>📧 haciendarasa@gmail.com</p>
+            </div>
+            <div class="about">
+                <h3>About</h3>
+                <p>📞 0912-5932-523</p>
+                <p>📧 haciendarasa@gmail.com</p>
+            </div>
+        </div>
+        <img src="right-icon.png" alt="Right Icon" class="footer-icon right-icon">
+    </footer>
+</body>
+</html>
