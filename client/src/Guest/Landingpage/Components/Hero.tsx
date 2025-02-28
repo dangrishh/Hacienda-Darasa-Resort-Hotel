@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
         offering a perfect blend of relaxation and adventure.</h1>
       </div>
       
-      <img className="" src={sampleImage} />
+      <img className="w-full h-auto object-cover" src={sampleImage} alt="Hacienda Darasa" />
 
     </div>
   );

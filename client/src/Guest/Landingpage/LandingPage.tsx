@@ -6,6 +6,7 @@ import BookNowButton from './Components/Booknow'
 import Navbar from './Components/Navbar'
 // import Lowericons from './Components/Lowericons'
 import Gallery from './Components/Gallery'
+import FeaturesSection from "./Components/Lowericons";
 
 
 
@@ -16,7 +17,7 @@ const App: React.FC = () => {
            <Navbar/>
            <BookNowButton/>
            <Hero/>
-           {/* <Lowericons/> */}
+           <FeaturesSection/>
            <Gallery/>
          
     </div>

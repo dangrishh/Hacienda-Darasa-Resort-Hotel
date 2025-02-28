@@ -58,15 +58,7 @@ const Navbar: React.FC = () => {
             </NavLink>
             
           </li>
-<<<<<<< HEAD:client/src/Guest/Landingpage/Components/Navbar.tsx
-
-          <li>
-            {/* <LoginButton/> */}
-          </li>
-
-=======
           
->>>>>>> 87f8ff82307572a31876f4dc1a10c3f6749ddba7:client/src/Landingpage/Components/Navbar.tsx
         </ul>
       </div>
     </nav>
