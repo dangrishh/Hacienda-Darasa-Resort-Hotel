@@ -123,11 +123,11 @@ export const createRoomDetails = async (req: Request, res: Response): Promise<vo
 export const updateRoomDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { RoomDetailsId } = req.params;
-        const { rate, extraPersonCharge, amenities } = req.body;
+        const { name, rates, extraPersonCharge, amenities, extraHourCharge } = req.body;
 
         const updatedRoomDetails = await RoomDetails.findByIdAndUpdate(
             RoomDetailsId,
-            { name, rate, extraPersonCharge,  amenities },
+            { name, rates, extraPersonCharge, amenities, extraHourCharge },
             { new: true, runValidators: true }
         );
 

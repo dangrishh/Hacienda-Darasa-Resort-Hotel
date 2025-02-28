@@ -5,6 +5,7 @@ import UserStaff from '../models/StaffUsers';
 import mongoose from 'mongoose';
 import { Booking } from '../models/Bookings';
 import {Room, RoomDetails, IRoomDetails} from '../models/Rooms';
+import { execSync } from 'child_process';
 
 
 export const bookCustomerReservation = async (req: Request, res: Response): Promise<void> => {
@@ -44,6 +45,8 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
       checkOutDate = new Date(checkIn.getTime() + 22 * 60 * 60 * 1000);
     }
 
+    /*
+
     // ✅ Determine if early check-in applies (before 2:00 PM)
     const standardCheckInTime = new Date(checkIn);
     standardCheckInTime.setHours(14, 0, 0, 0); // 2:00 PM
@@ -67,13 +70,22 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
       }
     }
 
-    let roomPrice = 0;
+    */
 
-    for (let i = 0; i < existingRoom.details.rates.length; i++)
+    const rateDetails = existingRoom.details.rates;
+    let roomPrice = 0;
+    let extraGuests = 0;
+
+    for (let i = 0; i < rateDetails.length; i++)
     {
-      if (existingRoom.details.rates[i].duration == reservationType)
+      if (rateDetails[i].duration == reservationType)
       {
-        roomPrice = existingRoom.details.rates[i].price;
+        roomPrice = rateDetails[i].price;
+        if (numOfGuests > rateDetails[i].maxPersons)
+        {
+          extraGuests = numOfGuests - rateDetails[i].maxPersons;
+          roomPrice += existingRoom.details.extraPersonCharge * extraGuests;
+        }
       }
     }
 
@@ -108,6 +120,7 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
       CheckOut: checkOutDate,
       TotalPrice: totalPrice,
       ExtraCharge: extraCharge > 0 ? `Extra charge: ${extraCharge}` : "No extra charge",
+      ExtraPersons: extraGuests > 0 ?  `Extra guests: ${extraGuests}` :  "No extra guests",
       BookStatus: "pending"
     });
 
@@ -253,9 +266,9 @@ export const updatePaymentStatus = async (req: Request, res: Response): Promise<
       else if (newStatus === "confirmed") {
         await Room.findByIdAndUpdate(booking.room, {
           booked: "reserved",
-          bookedBy: null,
-          bookingStartTime: null,
-          bookingEndTime: null,
+          bookedBy: booking.user,
+          bookingStartTime: booking.checkInDate,
+          bookingEndTime: booking.checkOutDate,
         });
       }
       else if (newStatus === "completed") {
