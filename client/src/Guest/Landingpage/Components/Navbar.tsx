@@ -19,6 +19,8 @@ const Navbar: React.FC = () => {
         </h1>
 
         <ul className="text-white flex gap-[100px] list-none text-[25px]">
+        
+          
           <li>
             <NavLink
               to="/about"
@@ -54,12 +56,17 @@ const Navbar: React.FC = () => {
             >
               About Us
             </NavLink>
+            
           </li>
+<<<<<<< HEAD:client/src/Guest/Landingpage/Components/Navbar.tsx
 
           <li>
             {/* <LoginButton/> */}
           </li>
 
+=======
+          
+>>>>>>> 87f8ff82307572a31876f4dc1a10c3f6749ddba7:client/src/Landingpage/Components/Navbar.tsx
         </ul>
       </div>
     </nav>

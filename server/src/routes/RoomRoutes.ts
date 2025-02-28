@@ -8,8 +8,10 @@ import {
     getRoomsDetials,
     updateRoom,
     deleteRoom,
-    getRoomsByStatus
+    getRoomsByStatus,
+    getRoomsByStatusGrouped,
 } from "../controllers/RoomsController";
+import { Request, Response, NextFunction } from "express";
 
 
 
@@ -21,11 +23,11 @@ router.get("/rooms/:id", getRoomById);
 
 router.get('/room-details', getAllRoomsDetials);
 router.get('/room-details/:id', getRoomsDetials);
-
 router.put("/updateRoom/:id", updateRoom);
 router.delete("/deleteRoom/:id", deleteRoom);
 
-
 router.get("/filtering-by-status", getRoomsByStatus);
+router.get("/filtering-by-details", getRoomsByStatusGrouped);
+
 
 export default router;
