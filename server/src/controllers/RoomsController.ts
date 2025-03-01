@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 
 import {RoomDetails, Room} from "../models/Rooms";
 
@@ -65,10 +66,9 @@ export const getRoomsByStatus = async (req: Request, res: Response): Promise<voi
   }
 };
 
-// get ( filtering by status by ID )
 export const getRoomsByStatusGrouped = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { status } = req.query;
+    const { status, detailsId } = req.query; // Get status and detailsId from query params
 
     // Validate input status
     const allowedStatuses = ["free", "occupied", "reserved"];
@@ -77,9 +77,15 @@ export const getRoomsByStatusGrouped = async (req: Request, res: Response, next:
       return;
     }
 
+    // Validate detailsId
+    if (!detailsId || !mongoose.Types.ObjectId.isValid(detailsId as string)) {
+      res.status(400).json({ error: "Invalid detailsId" });
+      return;
+    }
+
     const rooms = await Room.aggregate([
       {
-        $match: { booked: status } // Filter rooms by status
+        $match: { booked: status, details: new mongoose.Types.ObjectId(detailsId as string) } // Filter by status and RoomDetails ID
       },
       {
         $lookup: {
@@ -89,11 +95,11 @@ export const getRoomsByStatusGrouped = async (req: Request, res: Response, next:
           as: "roomDetails"
         }
       },
-      { $unwind: "$roomDetails" },
+      { $unwind: "$roomDetails" }, // Convert roomDetails array into an object
       {
         $group: {
           _id: "$roomDetails.name", // Group by RoomDetails name
-          rooms: { $push: { _id: "$_id", name: "$name" } }
+          rooms: { $push: { _id: "$_id", name: "$name", booked: "$booked" } } // Collect room details
         }
       }
     ]);
@@ -104,9 +110,6 @@ export const getRoomsByStatusGrouped = async (req: Request, res: Response, next:
     res.status(500).json({ error: "Failed to fetch rooms" });
   }
 };
-
-
-
 
 export const createRoom = async (req: Request, res: Response): Promise<void> => {
     try {
