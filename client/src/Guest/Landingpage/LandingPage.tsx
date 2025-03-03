@@ -4,9 +4,9 @@ import React from "react";
 import Hero from './Components/Hero'
 import BookNowButton from './Components/Booknow'
 import Navbar from './Components/Navbar'
-// import Lowericons from './Components/Lowericons'
 import Gallery from './Components/Gallery'
-import FeaturesSection from "./Components/Lowericons";
+import Lowericons from "./Components/Lowericons";
+import HotelRates from "./Components/HotelBooking";
 
 
 
@@ -17,8 +17,9 @@ const App: React.FC = () => {
            <Navbar/>
            <BookNowButton/>
            <Hero/>
-           <FeaturesSection/>
+           <Lowericons/>
            <Gallery/>
+           <HotelRates/>
          
     </div>
     

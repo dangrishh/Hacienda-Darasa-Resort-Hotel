@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../../assets/icons/Logo.png";
 
-// import LoginButton from '../../../assets/icons/Logo.png'
 const ResortName: React.CSSProperties = {
   fontFamily: "'Poppins', serif",
   fontWeight: "300",
@@ -19,16 +18,15 @@ const Navbar: React.FC = () => {
         </h1>
 
         <ul className="text-white flex gap-[100px] list-none text-[25px]">
-        
-          
           <li>
             <NavLink
               to="/about"
               className={({ isActive }) =>
-                `ml-[159px] no-underline transition duration-200 ${
+                `ml-[159px] no-underline text-white hover:text-gray-300 transition duration-200 ${
                   isActive ? "font-bold" : "font-normal"
                 }`
               }
+              style={{ color: "white" }} // Ensures color remains white even after visiting
             >
               Photos
             </NavLink>
@@ -37,10 +35,11 @@ const Navbar: React.FC = () => {
             <NavLink
               to="/services"
               className={({ isActive }) =>
-                `no-underline transition duration-200 ${
+                `no-underline text-white hover:text-gray-300 transition duration-200 ${
                   isActive ? "font-bold" : "font-normal"
                 }`
               }
+              style={{ color: "white" }}
             >
               Contacts
             </NavLink>
@@ -49,16 +48,15 @@ const Navbar: React.FC = () => {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                `no-underline transition duration-200 ${
-                  isActive ? "font-bold" : "font-normal"  
+                `no-underline text-white hover:text-gray-300 transition duration-200 ${
+                  isActive ? "font-bold" : "font-normal"
                 }`
               }
+              style={{ color: "white" }}
             >
               About Us
             </NavLink>
-            
           </li>
-          
         </ul>
       </div>
     </nav>

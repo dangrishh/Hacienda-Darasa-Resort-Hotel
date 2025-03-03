@@ -8,7 +8,7 @@ import Terms from '../src/Guest/Landingpage/Components/TermsCondition'
 import Cafe from './Cafe'
 const App: React.FC = () => {
   return (
-    <div className="">
+    <div className="h-[12000px]">
 
            
            <Routes>
