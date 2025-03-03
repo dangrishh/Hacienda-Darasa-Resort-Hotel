@@ -18,4 +18,4 @@ const CostumerUserSchema: Schema = new Schema({
 { timestamps: true }
 );
 
-export default mongoose.model<ICostumerUsers>('CustomerUser', CostumerUserSchema);
+export const CostumerUser = mongoose.models.CustomerUser || mongoose.model<ICostumerUsers>('CustomerUser', CostumerUserSchema);

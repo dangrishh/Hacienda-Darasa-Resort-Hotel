@@ -6,10 +6,10 @@ import {
 } from '../controllers/CostumerController';
 
 import {
-    bookReservation,
+    bookCustomerReservation,
     getBookings,
     getBookingById,
-    getBookingPrice
+    getBookingCost
 } from '../controllers/BookingController';
 
 const router = express.Router();
@@ -23,10 +23,11 @@ router.post('/login', loginCostumerUser);
 // ✅ Select an existing category (User ID required)
 router.post('/categories/book-selected', selectCategory);
 
-router.post('/bookings', bookReservation);
+router.post('/bookings', bookCustomerReservation);
 router.get('/bookings', getBookings);
+router.post('/bookings/cost', getBookingCost);
 router.get('/bookings/:id', getBookingById);
-router.get('/bookings/:bookingId/price', getBookingPrice);
+
 
 
 
