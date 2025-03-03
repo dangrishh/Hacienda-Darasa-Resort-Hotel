@@ -6,8 +6,153 @@ import mongoose from 'mongoose';
 import { Booking } from '../models/Bookings';
 import {Room, RoomDetails, IRoomDetails} from '../models/Rooms';
 import { execSync } from 'child_process';
+import { differenceInHours, addHours, addDays, set , differenceInMinutes} from "date-fns";
 
 
+
+const calculateCheckoutDate = (checkInDate: Date, reservationType: string): Date => {
+  let checkoutDate = new Date(checkInDate);
+  console.log("[DEBUG] Check-in:", checkoutDate.toISOString());
+
+  if (reservationType === "22hrs") {
+    if (checkoutDate.getUTCHours() < 14) {
+      console.log("[DEBUG] Early check-in detected, setting checkout to 12 PM UTC next day.");
+      checkoutDate = addDays(set(checkoutDate, { hours: 12, minutes: 0, seconds: 0 }), 1);
+      
+      // Convert to UTC explicitly
+      checkoutDate = new Date(Date.UTC(
+        checkoutDate.getUTCFullYear(),
+        checkoutDate.getUTCMonth(),
+        checkoutDate.getUTCDate(),
+        12, 0, 0 // Ensure it's 12 PM UTC
+      ));
+    } else {
+      console.log("[DEBUG] Standard 22-hour checkout.");
+      checkoutDate = addHours(checkoutDate, 22);
+    }
+  } else if (reservationType === "12hrs") {
+    checkoutDate = addHours(checkoutDate, 12);
+  } else {
+    throw new Error("Invalid reservation type");
+  }
+
+  console.log("[DEBUG] Calculated Check-out:", checkoutDate.toISOString());
+  return checkoutDate;
+};
+
+
+const calculateExtraHourCharge = (checkInDate: Date, hourlyRate: number): number => {
+  if (!hourlyRate || isNaN(hourlyRate)) {
+    console.error("[ERROR] Invalid hourly rate:", hourlyRate);
+    throw new Error("Hourly rate is missing or invalid");
+  }
+
+  console.log(`[DEBUG] Original Check-in Date: ${checkInDate.toISOString()}`);
+  console.log(`[DEBUG] Check-in Hour (Local): ${checkInDate.getHours()}`);
+  console.log(`[DEBUG] Check-in Hour (UTC): ${checkInDate.getUTCHours()}`);
+
+  if (checkInDate.getUTCHours() < 14) {  // Charge only for check-ins before 2 PM UTC
+    const extraHours = 14 - checkInDate.getUTCHours(); // Calculate extra hours before 2 PM
+    const extraCharge = extraHours * hourlyRate;
+
+    console.log(`[DEBUG] Extra Hours: ${extraHours}, Extra Hour Charge: ${extraCharge}`);
+    return extraCharge;
+  }
+  return 0;
+};
+
+
+
+
+// ✅ Function to calculate total price with detailed breakdown
+const calculateTotalPrice = async (
+  roomId: string,
+  checkInDate: Date,
+  reservationType: string,
+  numOfGuests: number
+): Promise<{ totalPrice: number; extraHourCharge: number; extraPersonCharge: number; checkOutDate: Date }> => {
+  const room = await Room.findById(roomId).populate<{ details: any }>("details");
+  if (!room) throw new Error("Room not found");
+
+  // ✅ Get room price and max persons based on reservation type
+  const rateDetails = room.details.rates;
+  let roomPrice = 0;
+  let maxPersons = 0;
+
+  for (let rate of rateDetails) {
+    if (rate.duration === reservationType) {
+      roomPrice = rate.price;
+      maxPersons = rate.maxPersons;
+      break;
+    }
+  }
+
+  if (!roomPrice) {
+    console.error("[ERROR] Room price not found for reservation type:", reservationType);
+    throw new Error("Invalid reservation type for this room");
+  }
+
+  // ✅ Calculate extra charges
+  const extraGuests = numOfGuests > maxPersons ? numOfGuests - maxPersons : 0;
+  const extraPersonCharge = extraGuests * room.details.extraPersonCharge;
+  
+  let extraHourCharge = 0;
+  if (reservationType === "22hrs") {
+    try {
+      extraHourCharge = calculateExtraHourCharge(checkInDate, room.details.extraHourCharge?.[0]?.price);
+    } catch (error) {
+      console.error("[ERROR] Failed to calculate extra hour charge:", error);
+      extraHourCharge = 0; // Fallback to 0 to prevent crashes
+    }
+  }
+
+  // ✅ Compute check-out date
+  const checkOutDate = calculateCheckoutDate(checkInDate, reservationType);
+
+  // ✅ Debugging logs
+  console.log(`[DEBUG] Room Price: ${roomPrice}`);
+  console.log(`[DEBUG] Extra Person Charge: ${extraPersonCharge}`);
+  console.log(`[DEBUG] Extra Hour Charge: ${extraHourCharge}`);
+  console.log(`[DEBUG] Total Price Calculation: ${roomPrice} + ${extraPersonCharge} + ${extraHourCharge}`);
+
+  return { 
+    totalPrice: roomPrice + extraPersonCharge + extraHourCharge, 
+    extraHourCharge, 
+    extraPersonCharge, 
+    checkOutDate 
+  };
+};
+
+// ✅ API Endpoint to Get Booking Cost
+export const getBookingCost = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { room, checkInDate, reservationType, numOfGuests } = req.body;
+
+    if (!room || !checkInDate || !reservationType || !numOfGuests) {
+      res.status(400).json({ error: "All fields are required" });
+      return;
+    }
+
+    const checkIn = new Date(checkInDate);
+    const { totalPrice, extraHourCharge, extraPersonCharge, checkOutDate } = await calculateTotalPrice(room, checkIn, reservationType, numOfGuests);
+
+    res.status(200).json({
+      message: "Booking cost calculated successfully!",
+      TotalPrice: totalPrice,
+      ExtraHourCharge: extraHourCharge > 0 ? `Extra charge for early check-in: PHP ${extraHourCharge}` : "No early check-in charge",
+      ExtraPersonCharge: extraPersonCharge > 0 ? `Extra charge for additional guests: PHP ${extraPersonCharge}` : "No extra guest charge",
+      CheckOutDate: checkOutDate,
+    });
+
+  } catch (error: unknown) {
+    console.error("Price Calculation Error:", error);
+
+    res.status(500).json({ error: error instanceof Error ? error.message : "Internal Server Error" });
+  }
+};
+
+
+// ✅ API Endpoint to Book a Room
 export const bookCustomerReservation = async (req: Request, res: Response): Promise<void> => {
   try {
     const { user, room, name, contactNumber, email, checkInDate, reservationType, numOfGuests } = req.body;
@@ -22,7 +167,7 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
       return;
     }
 
-    const existingRoom = await Room.findById(room).populate<{ details: IRoomDetails }>("details");
+    const existingRoom = await Room.findById(room);
     if (!existingRoom) {
       res.status(404).json({ error: "Room not found" });
       return;
@@ -33,67 +178,11 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
       return;
     }
 
-    // ✅ Convert check-in date to a Date object
     const checkIn = new Date(checkInDate);
-    let checkOutDate: Date | null = null;
-    let extraCharge = 0;
+    const { totalPrice, extraHourCharge, extraPersonCharge, checkOutDate } = await calculateTotalPrice(room, checkIn, reservationType, numOfGuests);
 
-    // ✅ Calculate checkout time normally by adding hours (NO fixed times)
-    if (reservationType === "12hrs") {
-      checkOutDate = new Date(checkIn.getTime() + 12 * 60 * 60 * 1000);
-    } else if (reservationType === "22hrs") {
-      checkOutDate = new Date(checkIn.getTime() + 22 * 60 * 60 * 1000);
-    }
-
+    // ✅ Save to database (uncomment when ready)
     /*
-
-    // ✅ Determine if early check-in applies (before 2:00 PM)
-    const standardCheckInTime = new Date(checkIn);
-    standardCheckInTime.setHours(14, 0, 0, 0); // 2:00 PM
-
-    if (checkIn.getHours() < 14) {
-      const extraHourCharge = existingRoom.details?.extraHourCharge[0]; // Get extra charge details
-
-      if (extraHourCharge) {
-        const firstHours = extraHourCharge.firstHours ?? 0; // Allowed extra hours before charge applies
-        const extraHourRate = extraHourCharge.price ?? 0; // Price per extra hour
-
-        // Calculate extra hours (only count hours before 2:00 PM)
-        const extraHours = Math.ceil((standardCheckInTime.getTime() - checkIn.getTime()) / (60 * 60 * 1000));
-
-        // Apply extra hour charge logic
-        if (extraHours > firstHours) {
-          extraCharge = extraHours * extraHourRate;
-        } else {
-          extraCharge = extraHourRate;
-        }
-      }
-    }
-
-    */
-
-    const rateDetails = existingRoom.details.rates;
-    let roomPrice = 0;
-    let extraGuests = 0;
-
-    for (let i = 0; i < rateDetails.length; i++)
-    {
-      if (rateDetails[i].duration == reservationType)
-      {
-        roomPrice = rateDetails[i].price;
-        if (numOfGuests > rateDetails[i].maxPersons)
-        {
-          extraGuests = numOfGuests - rateDetails[i].maxPersons;
-          roomPrice += existingRoom.details.extraPersonCharge * extraGuests;
-        }
-      }
-    }
-
-    // ✅ Calculate total price with extra charges
-    const totalPrice = roomPrice + extraCharge;
-
-    /*
-    // ✅ Save booking to database (example schema)
     const newBooking = new Booking({
       user,
       room,
@@ -105,13 +194,13 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
       reservationType,
       numOfGuests,
       totalPrice,
-      extraCharge: extraCharge > 0 ? `Extra charge: ${extraCharge}` : "No extra charge",
+      extraHourCharge,
+      extraPersonCharge,
       bookStatus: "pending"
     });
 
     await newBooking.save();
     */
-
 
     res.status(201).json({
       message: "Booking successful!",
@@ -119,16 +208,22 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
       CheckIn: checkIn,
       CheckOut: checkOutDate,
       TotalPrice: totalPrice,
-      ExtraCharge: extraCharge > 0 ? `Extra charge: ${extraCharge}` : "No extra charge",
-      ExtraPersons: extraGuests > 0 ?  `Extra guests: ${extraGuests}` :  "No extra guests",
+      ExtraHourCharge: extraHourCharge > 0 ? `Extra charge for early check-in: PHP ${extraHourCharge}` : "No early check-in charge",
+      ExtraPersonCharge: extraPersonCharge > 0 ? `Extra charge for additional guests: PHP ${extraPersonCharge}` : "No extra guest charge",
       BookStatus: "pending"
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Booking error:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 };
+
 
 
 
@@ -286,42 +381,3 @@ export const updatePaymentStatus = async (req: Request, res: Response): Promise<
     }
   };
 
-
-export const getBookingPrice = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { bookingId } = req.params;
-  
-      // Find the booking by ID
-      const booking = await Booking.findById(bookingId).populate("room");
-  
-      if (!booking) {
-        res.status(404).json({ success: false, error: "Booking not found" });
-        return;
-      }
-  
-      res.status(200).json({
-        success: true,
-        message: "Booking price retrieved successfully",
-        data: {
-          bookingId: booking._id,
-          user: booking.user,
-          name: booking.name,
-          contactNumber: booking.contactNumber,
-          email: booking.email,
-          room: booking.room,
-          checkInDate: booking.checkInDate,
-          checkOutDate: booking.checkOutDate,
-          numOfGuests: booking.numOfGuests,
-          totalPrice: booking.totalPrice, // Already stored in DB
-          bookStatus: booking.bookStatus,
-          paymentStatus: booking.paymentStatus,
-        },
-      });
-  
-    } catch (error) {
-      console.error("Error retrieving booking price:", error);
-      res.status(500).json({ success: false, error: "Internal server error" });
-    }
-  };
-
-  
