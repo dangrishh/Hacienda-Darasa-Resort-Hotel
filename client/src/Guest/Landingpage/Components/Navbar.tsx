@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../../assets/icons/Logo.png";
 
@@ -9,8 +9,26 @@ const ResortName: React.CSSProperties = {
 };
 
 const Navbar: React.FC = () => {
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.scrollY;
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [prevScrollPos]);
+
   return (
-    <nav className="absolute mt-[57px] bg-transparent text-white py-4 shadow-md">
+    <nav
+      className={`fixed top-0 left-0 pt-[10px] pb-[10px] w-full bg-[#0000004D] text-white py-4 shadow-md z-50 backdrop-blur-md transition-transform duration-300 ${
+        visible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="container mx-auto flex items-center ml-[50px]">
         <img src={Logo} alt="Logo" />
         <h1 style={ResortName} className="text-white text-[20px] ml-[12px]">
@@ -26,7 +44,6 @@ const Navbar: React.FC = () => {
                   isActive ? "font-bold" : "font-normal"
                 }`
               }
-              style={{ color: "white" }} // Ensures color remains white even after visiting
             >
               Photos
             </NavLink>
@@ -39,7 +56,6 @@ const Navbar: React.FC = () => {
                   isActive ? "font-bold" : "font-normal"
                 }`
               }
-              style={{ color: "white" }}
             >
               Contacts
             </NavLink>
@@ -52,7 +68,6 @@ const Navbar: React.FC = () => {
                   isActive ? "font-bold" : "font-normal"
                 }`
               }
-              style={{ color: "white" }}
             >
               About Us
             </NavLink>

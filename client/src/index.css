@@ -75,4 +75,45 @@
     }
 } */
 
-  
+
+/* Slim scrollbar */
+::-webkit-scrollbar {
+  width: 6px; /* Very thin for a modern look */
+}
+
+/* Make the scrollbar track (background) the same as the container so it blends in */
+::-webkit-scrollbar-track {
+  background: transparent; /* Invisible track */
+  border-radius: 10px;
+}
+
+/* Make the scrollbar thumb (draggable part) long, thin, and oblong */
+::-webkit-scrollbar-thumb {
+  background: rgba(160, 160, 160, 0.6); /* Semi-transparent gray */
+  border-radius: 10px; /* Rounded edges */
+  min-height: 50px; /* Longer scrollbar thumb */
+}
+
+/* On hover, make the scrollbar slightly more visible */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 120, 120, 0.8); /* Darker gray, still semi-transparent */
+}
+
+/* Remove scrollbar arrows */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(160, 160, 160, 0.6) transparent;
+}
+
+a {
+  color: white !important;
+}
+
+a:visited {
+  color: white !important;
+}
