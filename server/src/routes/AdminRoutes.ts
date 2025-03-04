@@ -36,7 +36,6 @@ router.put('/room-details/update/:roomId', updateRoomDetails);
 router.delete('/room-details/delete/:roomId', deleteRoomDetails);
 router.post('/room-details/create', createRoomDetails);
 
-<<<<<<< HEAD
 // Event Hall Route
 router.post('/event-hall/create', createEventHall);
 
@@ -48,8 +47,6 @@ router.post('/cottage/create', createCottage);
 
 // Swim Rate Route
 router.post('/swim-rate/create', createSwimRate);
-=======
 router.get('/getAllUsers', getAllUsers);
->>>>>>> booking
 
 export default router;

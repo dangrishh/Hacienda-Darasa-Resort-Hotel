@@ -109,11 +109,3 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(160, 160, 160, 0.6) transparent;
 }
-
-a {
-  color: white !important;
-}
-
-a:visited {
-  color: white !important;
-}
