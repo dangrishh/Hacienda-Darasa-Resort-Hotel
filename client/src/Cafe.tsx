@@ -1,21 +1,41 @@
-import React from "react";
+import React, { useState } from 'react';
 import background from "./assets/images/coffee-bg.png"
 import iconLogo from "./assets/images/Icon-Logo.png"
+import { DownloadOutlined } from '@ant-design/icons';
+import { Button, Divider, Flex, Radio } from 'antd';
+
+import type { ConfigProviderProps } from 'antd';
+
+
+type SizeType = ConfigProviderProps['componentSize'];
 
 const App: React.FC = () => {
+
+  const [size, setSize] = useState<SizeType>('large'); // default is 'middle'
+
   return (
-    <div className="flex flex-col items-center bg-gray-200 min-h-screen">
-      {/* Hero Section */}
-      <div
-      >
-        <img src={background} className="relative h-auto max-w-full bg-cover bg-center flex justify-end items-center pr-5" ></img>
-        <div className="text-center bg-white bg-opacity-80 p-5 rounded-lg flex flex-col items-center">
-          <img src={iconLogo} alt="Cafe Luntian Logo" className="w-[120px] mb-2" />
-          <a href="#" className="mt-2 px-5 py-2 bg-orange-500 text-white rounded-md font-bold w-[150px] flex justify-center">
-            Go to page →
-          </a>
-        </div>
-      </div>
+
+    
+ <div className="relative w-full h-full">
+
+  <img
+    src={background}
+    className="h-full w-full object-cover"
+    alt="Background"
+  />
+  <div className=" ml-[80%] absolute right-5 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-5 rounded-lg flex flex-col items-center z-10 shadow-lg">
+    <img src={iconLogo} alt="Cafe Luntian Logo" className=" mt-[-230px]" />
+    <Button
+      type="primary"
+      shape="round"
+      size={size}
+      style={{ backgroundColor: '#FF8C00' }}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E07B00')}
+      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#FF8C00')}
+    >
+      Go to page →
+    </Button>
+  </div>
       
 
       {/* Footer Section
