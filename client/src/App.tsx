@@ -6,6 +6,7 @@ import Guest from './Routes/Guest'
 import Login from '../src/LoginComponent'
 import Terms from '../src/Guest/Landingpage/Components/TermsCondition'
 import Cafe from './Cafe'
+import Maps from './Maps'
 const App: React.FC = () => {
   return (
     <div className="">
@@ -18,6 +19,7 @@ const App: React.FC = () => {
              <Route path="/Login" element={<Login/>} />
              <Route path="/Terms" element={<Terms/>} />
              <Route path="/Cafe" element={<Cafe/>} />
+             <Route path="/Maps" element={<Maps/>} />
               
            </Routes>
       
