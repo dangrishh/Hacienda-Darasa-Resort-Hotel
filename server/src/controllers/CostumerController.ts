@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import CostumerUser from '../models/CostumerUsers';
+import {CostumerUser} from '../models/CostumerUsers';
 import { AdminUsers } from '../models/AdminUsers';
 import {RoomDetails} from '../models/Rooms';
 import {Booking} from '../models/Bookings';

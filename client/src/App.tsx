@@ -9,7 +9,7 @@ import Cafe from './Cafe'
 import Maps from './Maps'
 const App: React.FC = () => {
   return (
-    <div className="">
+    <div className="h-[12000px]">
 
            
            <Routes>

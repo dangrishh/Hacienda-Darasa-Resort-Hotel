@@ -11,6 +11,7 @@ import { DayTourRates } from '../models/DayTourRates';
 import { SwimRate } from '../models/SwimRates'; // 
 
 import upload from '../middleware/uploadMiddleware'; 
+import {CostumerUser} from '../models/CostumerUsers';
 import uploadRooms from '../middleware/uploadRooms'; 
 
 // Register Controller
@@ -74,6 +75,17 @@ export const loginAdminUser = async (req: Request, res: Response): Promise<void>
     }
 };
 
+export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const allUsers = await CostumerUser.find();
+        res.json(allUsers);
+    }
+    catch (error) {
+        console.error("Error fetching all users:", error);
+        res.status(500).json({ error: "Failed to fetch all users" });
+    }
+}
+
 export const createRoomDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, rates, extraPersonCharge, amenities } = req.body;
@@ -119,11 +131,11 @@ export const createRoomDetails = async (req: Request, res: Response): Promise<vo
 export const updateRoomDetails = async (req: Request, res: Response): Promise<void> => {
     try {
         const { RoomDetailsId } = req.params;
-        const { rate, extraPersonCharge, amenities } = req.body;
+        const { name, rates, extraPersonCharge, amenities, extraHourCharge } = req.body;
 
         const updatedRoomDetails = await RoomDetails.findByIdAndUpdate(
             RoomDetailsId,
-            { name, rate, extraPersonCharge,  amenities },
+            { name, rates, extraPersonCharge, amenities, extraHourCharge },
             { new: true, runValidators: true }
         );
 

@@ -4,6 +4,7 @@ import express, { Router, Request, Response } from 'express';
 import { 
     registerAdminUser, 
     loginAdminUser, 
+    getAllUsers
 } from '../controllers/AdminController';
 
 
@@ -46,5 +47,6 @@ router.post('/cottage/create', createCottage);
 
 // Swim Rate Route
 router.post('/swim-rate/create', createSwimRate);
+router.get('/getAllUsers', getAllUsers);
 
 export default router;

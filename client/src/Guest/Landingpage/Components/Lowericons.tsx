@@ -31,7 +31,7 @@ const features = [
   },
 ];
 
-const FeaturesSection: React.FC = () => {
+const Lowericons: React.FC = () => {
   return (
     <div className="bg-[white] py-16 px-4 flex justify-center mt-[-750px]">
       <div className="max-w-7xl w-full">
@@ -49,4 +49,4 @@ const FeaturesSection: React.FC = () => {
   );
 };
 
-export default FeaturesSection;
+export default Lowericons;

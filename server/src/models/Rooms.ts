@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import CustomerUser from '../models/CostumerUsers';
+import {CostumerUser} from '../models/CostumerUsers';
 
 interface IRoom {
   name: string;
@@ -12,15 +12,21 @@ interface IRoom {
 }
 
 interface IRoomRate {
-  duration: number; // "12 hours" or "22 hours"
+  duration: number; // "12 hours" or "22 hours" 
   price: number;
   maxPersons: number; // Maximum allowed persons per rate
 }
 
-interface IRoomDetails extends Document {
+interface IHourExtension {
+  firstHours: number;
+  price: number;
+}
+
+export interface IRoomDetails extends Document {
   name: string;
   rates: IRoomRate[]; // Multiple rate options
   extraPersonCharge: number;
+  extraHourCharge: IHourExtension[]; // For hour extensions
   amenities: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -50,12 +56,18 @@ const RoomDetailsSchema: Schema = new Schema(
     name: { type: String, required: true },
     rates: [
       {
-        duration: { type: Number, required: true }, // Example: "12 hours"
+        duration: { type: String, required: true }, // Example: "12 hours"
         price: { type: Number, required: true }, // Example: 2000
         maxPersons: { type: Number, required: true }, // Example: 2
       },
     ],
     extraPersonCharge: { type: Number, required: true },
+    extraHourCharge: [
+      {
+        firstHours: { type: Number, required: true },
+        price: { type: Number, required: true }
+      },
+    ],
     amenities: { type: [String], required: true },
   },
   { timestamps: true }
