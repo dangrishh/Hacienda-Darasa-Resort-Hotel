@@ -9,42 +9,42 @@ const ResortName: React.CSSProperties = {
 };
 
 const Navbar: React.FC = () => {
-  const [prevScrollPos, setPrevScrollPos] = useState(window.scrollY);
-  const [visible, setVisible] = useState(true);
-  const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
+  // const [prevScrollPos, setPrevScrollPos] = useState(window.scrollY);
+  // const [visible, setVisible] = useState(true);
+  // const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const currentScrollPos = window.scrollY;
 
-      // Show navbar if scrolling up OR at the top
-      if (prevScrollPos > currentScrollPos || currentScrollPos < 10) {
-        setVisible(true);
-        if (hideTimeout) clearTimeout(hideTimeout); // Cancel hide timeout
-      } else {
-        setVisible(false); // Hide immediately when scrolling down
-      }
+  //     // Show navbar if scrolling up OR at the top
+  //     if (prevScrollPos > currentScrollPos || currentScrollPos < 10) {
+  //       setVisible(true);
+  //       if (hideTimeout) clearTimeout(hideTimeout); // Cancel hide timeout
+  //     } else {
+  //       setVisible(false); // Hide immediately when scrolling down
+  //     }
 
-      // Start hide timer when stopping
-      if (hideTimeout) clearTimeout(hideTimeout);
-      const timeout = setTimeout(() => setVisible(false), 2000); // Hide after 3s of stillness
-      setHideTimeout(timeout);
+  //     // Start hide timer when stopping
+  //     if (hideTimeout) clearTimeout(hideTimeout);
+  //     const timeout = setTimeout(() => setVisible(false), 2000); // Hide after 3s of stillness
+  //     setHideTimeout(timeout);
 
-      setPrevScrollPos(currentScrollPos);
-    };
+  //     setPrevScrollPos(currentScrollPos);
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (hideTimeout) clearTimeout(hideTimeout);
-    };
-  }, [prevScrollPos]);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //     if (hideTimeout) clearTimeout(hideTimeout);
+  //   };
+  // }, [prevScrollPos]);
 
   return (
     <nav
-      className={`fixed top-0 left-0 pt-[10px] pb-[10px] w-full bg-[#0000004D] text-[#FFFFFF] py-4 shadow-md z-50 backdrop-blur-md transition-transform duration-300 ${
-        visible ? "translate-y-0" : "-translate-y-full"
-      }`}
+      className={" top-0 left-0 pt-[10px] pb-[10px] w-full bg-[#000000] text-[#FFFFFF] py-4 shadow-md z-50 backdrop-blur-lg transition-transform duration-300"}
+      //   visible ? "translate-y-0" : "-translate-y-full"
+      // }`}
     >
       <div className="container mx-auto flex items-center ml-[50px]">
         <img src={Logo} alt="Logo" />

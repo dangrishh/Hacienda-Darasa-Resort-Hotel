@@ -5,8 +5,9 @@ import { Routes, Route } from 'react-router-dom';
 import Guest from './Routes/Guest'
 import Login from '../src/LoginComponent'
 import Terms from '../src/Guest/Landingpage/Components/TermsCondition'
-import Cafe from './Cafe'
+// import Cafe from './Cafe'
 import Maps from './Maps'
+import Cafe from "./Cafe";
 const App: React.FC = () => {
   return (
     <div className="h-[12000px]">
