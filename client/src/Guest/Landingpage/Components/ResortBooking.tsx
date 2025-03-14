@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import RoomCard from "./HotelRoomCard"; // Import the RoomCard component
+import ResortCard from "./ResortCard";
 
 interface Room {
   name: string;
@@ -63,7 +63,7 @@ const ResortRates: React.FC = () => {
           <div className="grid grid-cols-1 gap-6">
             {rooms.map((room, index) => (
               <div key={index} className="mb-6">
-                <RoomCard 
+                <ResortCard
                   name={room.name} 
                   rate12hrs={room.rates12hrs?.price || null} 
                   rate22hrs={room.rates22hrs?.price || null} 

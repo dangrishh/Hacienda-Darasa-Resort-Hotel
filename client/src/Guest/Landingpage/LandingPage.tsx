@@ -8,6 +8,7 @@ import Gallery from './Components/Gallery'
 import Lowericons from "./Components/Lowericons"
 import HotelRates from "./Components/HotelBooking"
 import ResortRates from "./Components/ResortBooking";
+import Photos from "./Components/Photos";
 
 
 
@@ -23,6 +24,7 @@ const App: React.FC = () => {
            <Gallery/>
            <HotelRates/>
            <ResortRates/>
+           <Photos/>
          
     </div>
     
