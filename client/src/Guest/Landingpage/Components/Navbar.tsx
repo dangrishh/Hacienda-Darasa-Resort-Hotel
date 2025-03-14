@@ -4,7 +4,7 @@ import Logo from "../../../assets/icons/Logo.png";
 
 const ResortName: React.CSSProperties = {
   fontFamily: "'Poppins', serif",
-  fontWeight: "300",
+  fontWeight: "800",
   color: "#FFFFFF",
 };
 
@@ -40,49 +40,90 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto flex items-center pl-[20px] pr-[20px] pt-[10px] pb-[10px]">
-        <img src={Logo} alt="Logo" />
-        <h1 style={ResortName} className="text-[#FFFFFF] text-[20px] ml-[12px]">
-          Hacienda Darasa Garden <br /> Resort & Hotel
-        </h1>
+        {/* Logo & Resort Name */}
+        <div className="flex items-center">
+          <img src={Logo} alt="Logo" />
+          <h1 style={ResortName} className="text-[#FFFFFF] text-[20px] ml-[12px]">
+            Hacienda Darasa Garden <br /> Resort & Hotel
+          </h1>
+        </div>
 
-        <ul className="text-[#FFFFFF] flex gap-[100px] list-none text-[25px] ml-auto mr-[50px]">
-          <li>
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
-                  isActive ? "font-bold" : "font-normal"
-                }`
-              }
-            >
-              Photos
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/services"
-              className={({ isActive }) =>
-                `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
-                  isActive ? "font-bold" : "font-normal"
-                }`
-              }
-            >
-              Contacts
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
-                  isActive ? "font-bold" : "font-normal"
-                }`
-              }
-            >
-              About Us
-            </NavLink>
-          </li>
-        </ul>
+        {/* Navigation Links */}
+        <div className="flex gap-[60px] list-none text-[25px] ml-[80px] mr-auto">
+          <NavLink
+            to="/photos"
+            className={({ isActive }) =>
+              `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
+                isActive ? "font-bold" : "font-normal"
+              }`
+            }
+          >
+            Photos
+          </NavLink>
+          <NavLink
+            to="/rooms"
+            className={({ isActive }) =>
+              `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
+                isActive ? "font-bold" : "font-normal"
+              }`
+            }
+          >
+            Rooms
+          </NavLink>
+          <NavLink
+            to="/swimrates"
+            className={({ isActive }) =>
+              `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
+                isActive ? "font-bold" : "font-normal"
+              }`
+            }
+          >
+            Swim Rates
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
+                isActive ? "font-bold" : "font-normal"
+              }`
+            }
+          >
+            About Us
+          </NavLink>
+          <NavLink
+            to="/cafe"
+            className={({ isActive }) =>
+              `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
+                isActive ? "font-bold" : "font-normal"
+              }`
+            }
+          >
+            Cafe
+          </NavLink>
+        </div>
+
+        {/* Login & Book Now Buttons */}
+        <div className="flex items-center gap-[80px] ml-auto list-none text-[25px] mr-[50px]">
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
+                isActive ? "font-bold" : "font-normal"
+              }`
+            }
+          >
+            Login
+          </NavLink>
+          <NavLink
+            to="/booknow"
+            className="h-[50px] w-[150px] bg-[#28C669] text-[18px] text-[#FFFFFF]
+                      rounded-lg hover:bg-[#50E685] border-0 outline-none focus:outline-none 
+                      focus:ring-0 active:ring-0 flex items-center justify-center transition duration-300 no-underline"
+          >
+            BOOK NOW
+          </NavLink>
+        </div>
+
       </div>
     </nav>
   );
