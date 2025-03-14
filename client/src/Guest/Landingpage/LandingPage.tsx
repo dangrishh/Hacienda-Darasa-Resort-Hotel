@@ -10,6 +10,7 @@ import HotelRates from "./Components/HotelBooking"
 import ResortRates from "./Components/ResortBooking";
 import Photos from "./Components/Photos";
 import Cafe from "./Components/Cafe";
+import Maps from "./Components/Maps";
 
 
 
@@ -27,6 +28,7 @@ const App: React.FC = () => {
            <ResortRates/>
            <Photos/>
            <Cafe/>
+           <Maps/>
          
     </div>
     

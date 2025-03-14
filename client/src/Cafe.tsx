@@ -1,6 +1,6 @@
 import React from 'react';
-import background from "./assets/images/coffee-bg.png"
-import iconLogo from "./assets/images/Icon-Logo.png"
+import background from "./assets/images/coffeeBG.jpg"
+import iconLogo from "./assets/images/icon-Logo.png"
 import { Button } from 'antd';
 
 const App: React.FC = () => {

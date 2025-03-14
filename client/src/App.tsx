@@ -10,7 +10,7 @@ import Maps from './Maps'
 import Cafe from "./Cafe";
 const App: React.FC = () => {
   return (
-    <div className="h-[12000px]">
+    <div className="h-[8000px]">
 
            
            <Routes>
