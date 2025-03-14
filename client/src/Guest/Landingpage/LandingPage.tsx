@@ -9,6 +9,7 @@ import Lowericons from "./Components/Lowericons"
 import HotelRates from "./Components/HotelBooking"
 import ResortRates from "./Components/ResortBooking";
 import Photos from "./Components/Photos";
+import Cafe from "./Components/Cafe";
 
 
 
@@ -25,6 +26,7 @@ const App: React.FC = () => {
            <HotelRates/>
            <ResortRates/>
            <Photos/>
+           <Cafe/>
          
     </div>
     

@@ -1,10 +1,10 @@
 import React from "react";
 import background from "../../../assets/images/coffee-bg.png"
-import cafelogo from "/src/assets/img/Cafelogo.jpg";
+import cafelogo from "../../../assets/img/Cafelogo.jpg";
 import leftIcon from "/src/assets/img/left-icon.png";
 import rightIcon from "/src/assets/img/right-icon.png";
 
-const Hero: React.FC = () => {
+const Cafe: React.FC = () => {
   return (
     <div 
       
@@ -48,13 +48,15 @@ const Hero: React.FC = () => {
 //   );
 // };
 
-const App: React.FC = () => {
-  return (
-    <div className="flex flex-col items-center bg-gray-100 min-h-screen">
-      <Hero />
-      {/* <Footer /> */}
-    </div>
-  );
-};
+// const App: React.FC = () => {
+//   return (
+//     <div className="flex flex-col items-center bg-gray-100 min-h-screen">
+//       <Cafe />
+//       {/* <Footer /> */}
+//     </div>
+//   );
+// };
 
-export default App;
+// export default App;
+
+export default Cafe;

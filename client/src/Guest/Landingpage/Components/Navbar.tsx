@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../../assets/icons/Logo.png";
+import LoginIcon from "../../../assets/icons/login-icon.png"
 
 const ResortName: React.CSSProperties = {
   fontFamily: "'Poppins', serif",
@@ -49,7 +50,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex gap-[60px] list-none text-[25px] ml-[80px] mr-auto">
+        <div className="flex gap-[60px] list-none text-[27px] ml-[80px] mr-auto">
           <NavLink
             to="/photos"
             className={({ isActive }) =>
@@ -103,20 +104,21 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Login & Book Now Buttons */}
-        <div className="flex items-center gap-[80px] ml-auto list-none text-[25px] mr-[50px]">
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
-                isActive ? "font-bold" : "font-normal"
-              }`
-            }
-          >
-            Login
-          </NavLink>
+        <div className="flex items-center gap-[80px] ml-auto list-none text-[30px] mr-[50px]">
+        <NavLink
+          to="/login"
+          className={({ isActive }) =>
+            `flex items-center gap-2 no-underline text-[#FFFFFF] visited:text-[#FFFFFF] hover:text-[#D1D5DB] transition duration-200 ${
+              isActive ? "font-bold" : "font-normal"
+            }`
+          }
+        >
+          <img src={LoginIcon} alt="Login" className="w-[30px] h-[30px] object-contain mr-[5px]" />
+          <span className="flex items-center underline">Login</span>
+        </NavLink>
           <NavLink
             to="/booknow"
-            className="h-[50px] w-[150px] bg-[#28C669] text-[18px] text-[#FFFFFF]
+            className="h-[50px] w-[150px] bg-[#28C669] text-[20px] text-[#FFFFFF]
                       rounded-lg hover:bg-[#50E685] border-0 outline-none focus:outline-none 
                       focus:ring-0 active:ring-0 flex items-center justify-center transition duration-300 no-underline"
           >
