@@ -4,7 +4,7 @@ import logoFooter from "../../../assets/images/logo-footer.png";
 const Footer: React.FC = () => {
 
   return (
-    <footer className="w-full bg-[#10182F] text-white py-12 px-8 md:px-16">
+    <footer className="w-full bg-[#10182F] text-white py-12 md:px-16 mt-[5%]">
     <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 items-start">
   
       {/* Logo & Name */}

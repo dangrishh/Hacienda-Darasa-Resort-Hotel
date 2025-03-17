@@ -20,7 +20,7 @@ const Cafe: React.FC = () => {
         />
 
         {/* Content Box - Stays on the Right */}
-        <div className="relative z-10 bg-white bg-opacity-80 p-6 md:p-10 rounded-lg flex flex-col items-center shadow-lg mr-10">
+        <div className="relative z-10 bg-opacity-80 p-6 md:p-10 rounded-lg flex flex-col items-center shadow-lg mr-10">
           <img src={cafelogo} alt="Cafe Luntian Logo" className="w-[300px] h-auto mb-6" />
         </div>
       </div>
