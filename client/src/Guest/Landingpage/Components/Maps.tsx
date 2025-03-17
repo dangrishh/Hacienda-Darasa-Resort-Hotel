@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 const Maps: React.FC = () => {
     return (
-      <section className="max-w-[90%] mx-auto mt-[20px] text-center">
+      <section className="max-w-[90%] mx-auto mt-[15%] text-center">
         {/* Title */}
         <div className="w-11/12 flex items-center mb-3">
           <h1 className="text-[100px] font-bold">MAPS</h1>
