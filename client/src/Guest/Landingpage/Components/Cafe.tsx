@@ -11,16 +11,17 @@ const Cafe: React.FC = () => {
       </div>
 
       {/* Background Image Container */}
-      <div className="relative w-full h-[700px] flex justify-end items-center">
+      <div className="relative w-full h-screen flex justify-end items-center">
+        {/* Background Image */}
         <img
           src={background}
           alt="Cafe Background"
-          className="absolute top-0 left-0 w-full h-full"
+          className="absolute top-0 left-0 w-full h-full object-cover"
         />
 
         {/* Content Box - Stays on the Right */}
-        <div className="relative z-[10] bg-white bg-opacity-[80%] p-[20px] rounded-lg flex flex-col items-center shadow-lg mr-[40px]">
-          <img src={cafelogo} alt="Cafe Luntian Logo" className="w-[300px] mb-[20px] h-[550px]" />
+        <div className="relative z-10 bg-white bg-opacity-80 p-6 md:p-10 rounded-lg flex flex-col items-center shadow-lg mr-10">
+          <img src={cafelogo} alt="Cafe Luntian Logo" className="w-[300px] h-auto mb-6" />
         </div>
       </div>
     </section>

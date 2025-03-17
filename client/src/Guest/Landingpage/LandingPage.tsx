@@ -11,6 +11,7 @@ import ResortRates from "./Components/ResortBooking";
 import Photos from "./Components/Photos";
 import Cafe from "./Components/Cafe";
 import Maps from "./Components/Maps";
+import Footer from "./Components/Footer"
 
 
 
@@ -29,6 +30,7 @@ const App: React.FC = () => {
            <Photos/>
            <Cafe/>
            <Maps/>
+           <Footer/>
          
     </div>
     
