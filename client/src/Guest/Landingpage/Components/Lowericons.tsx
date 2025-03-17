@@ -34,7 +34,7 @@ const features = [
 const Lowericons: React.FC = () => {
   return (
     <div className="bg-[white] py-16 px-4 flex justify-center mt-[-750px]">
-      <div className="max-w-7xl w-full">
+      <div className="w-full">
         <div className="flex justify-between items-center gap-8">
           {features.map((feature, index) => (
             <div key={index} className="flex flex-col items-center text-center w-1/4">

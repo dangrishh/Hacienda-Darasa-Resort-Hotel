@@ -6,7 +6,7 @@ import Guest from './Routes/Guest'
 import Login from '../src/LoginComponent'
 import Terms from '../src/Guest/Landingpage/Components/TermsCondition'
 // import Cafe from './Cafe'
-import Maps from './Maps'
+import Maps from '../src/Guest/Landingpage/Components//Maps'
 import Cafe from "../src/Guest/Landingpage/Components/Cafe";
 import Footer from "../src/Guest/Landingpage/Components/Footer"
 const App: React.FC = () => {
@@ -20,10 +20,7 @@ const App: React.FC = () => {
              <Route path="/Terms" element={<Terms/>} />
              <Route path="/Cafe" element={<Cafe/>} />
              <Route path="/Maps" element={<Maps/>} />
-<<<<<<< Updated upstream
-=======
              <Route path="/Footer" element={<Footer/>} />
->>>>>>> Stashed changes
            </Routes>
     </div>
   );

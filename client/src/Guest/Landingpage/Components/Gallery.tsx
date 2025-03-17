@@ -7,9 +7,9 @@ import poolImage from "../../../assets/images/main-page.jpg";
 const FamilyResortSection: React.FC = () => {
   return (
     <>
-      <section className="absolute flex flex-col lg:flex-row items-start justify-start px-8 py-12 bg-white max-w-[95%] ml-auto ">
+      <section className="flex flex-col lg:flex-row items-start justify-start bg-white max-w-[95%] ml-auto ">
         {/* Text Section */}
-        <div className="lg:w-1/2">
+        <div className="lg">
           <div className="text-left mb-8 lg:mb-0 ml-[1200px] mt-[200px] text-[35px]">
           <h2 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
 

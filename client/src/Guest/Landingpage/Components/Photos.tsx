@@ -9,7 +9,7 @@ const Photos: React.FC = () => {
         </div>
   
         {/* Room List */}
-        <div className="h-[700px] w-full mx-auto overflow-y-auto p-4 border-solid"></div>
+        <div className="h-[700px] w-full mx-auto overflow-y-auto border-[2px] border-black border-solid"></div>
       </section>
     );
   };

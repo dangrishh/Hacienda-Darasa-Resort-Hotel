@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
         visible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="container mx-auto flex items-center pl-[20px] pr-[20px] pt-[10px] pb-[10px]">
+      <div className="container mx-[20px] flex items-center pl-[20px] pr-[20px] pt-[10px] pb-[10px]">
         {/* Logo & Resort Name */}
         <div className="flex items-center">
           <img src={Logo} alt="Logo" />
@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex gap-[60px] list-none text-[27px] ml-[80px] mr-auto">
+        <div className="flex gap-[35px] list-none text-[27px] ml-[50px] mr-auto">
           <NavLink
             to="/photos"
             className={({ isActive }) =>
@@ -104,7 +104,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Login & Book Now Buttons */}
-        <div className="flex items-center gap-[80px] ml-auto list-none text-[30px] mr-[50px]">
+        <div className="absolute right-[50px] flex items-center gap-[80px] list-none text-[30px]">
         <NavLink
           to="/login"
           className={({ isActive }) =>
