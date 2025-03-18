@@ -152,7 +152,7 @@ export const getBookingCost = async (req: Request, res: Response): Promise<void>
 };
 
 
-// ✅ API Endpoint to Book a Room
+
 export const bookCustomerReservation = async (req: Request, res: Response): Promise<void> => {
   try {
     const { user, room, name, contactNumber, email, checkInDate, reservationType, numOfGuests } = req.body;
@@ -181,26 +181,29 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
     const checkIn = new Date(checkInDate);
     const { totalPrice, extraHourCharge, extraPersonCharge, checkOutDate } = await calculateTotalPrice(room, checkIn, reservationType, numOfGuests);
 
-    // ✅ Save to database (uncomment when ready)
-    /*
+    // ✅ Save booking details to database
     const newBooking = new Booking({
       user,
       room,
-      name,
-      contactNumber,
-      email,
+      // redundant, because userId of client 
+      // name,
+      // contactNumber, 
+      // email,
       checkInDate: checkIn,
       checkOutDate,
       reservationType,
-      numOfGuests,
+      numOfGuests, // extraCharge person??
       totalPrice,
       extraHourCharge,
-      extraPersonCharge,
+      extraPersonCharge, // redundant
       bookStatus: "pending"
     });
 
     await newBooking.save();
-    */
+
+    // ✅ Update room status to "booked"
+    existingRoom.booked = "reserved";
+    await existingRoom.save();
 
     res.status(201).json({
       message: "Booking successful!",
@@ -223,9 +226,6 @@ export const bookCustomerReservation = async (req: Request, res: Response): Prom
     }
   }
 };
-
-
-
 
 export const getBookings = async (req: Request, res: Response): Promise<void> => {
   try {
