@@ -26,7 +26,7 @@ const FamilyResortSection: React.FC = () => {
         </div>
       </section>
 
-      <section className="px-8 py-12 bg-white max-w-[95%] ml-auto mt-[200px]">
+      <section className="px-8 py-12 bg-white max-w-[95%] ml-auto mt-[10%]">
         {/* Image Section */}
         <div className="lg:w-1/2">
           <div className="grid grid-cols-2 gap-6">

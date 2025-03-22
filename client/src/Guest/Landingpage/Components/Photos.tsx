@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const Photos: React.FC = () => {
     return (
-      <section className="max-w-[90%] mx-auto mt-[200px]">
+      <section className="max-w-[90%] mx-auto mt-[10%]">
         {/* Title */}
         <div className="ml-20 mb-[15px]">
           <h1 className="text-[100px] font-bold">PHOTOS</h1>

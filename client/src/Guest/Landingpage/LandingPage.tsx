@@ -28,7 +28,6 @@ const App: React.FC = () => {
            <HotelRates/>
            <ResortRates/>
            <Photos/>
-           <Cafe/>
            <Maps/>
            <Footer/>
          
