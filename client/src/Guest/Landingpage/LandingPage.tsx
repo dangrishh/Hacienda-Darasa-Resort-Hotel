@@ -2,6 +2,8 @@ import React from "react";
 
 
 import Hero from './Components/Hero'
+import Carousel from "./Components/Carousel";
+
 import BookNowButton from './Components/Booknow'
 import Navbar from './Components/Navbar'
 import Gallery from './Components/Gallery'
@@ -21,8 +23,7 @@ const App: React.FC = () => {
     <div className="">
 
            <Navbar/>
-           <BookNowButton/>
-           <Hero/>
+           <Carousel/>
            <Lowericons/>
            <Gallery/>
            <HotelRates/>
