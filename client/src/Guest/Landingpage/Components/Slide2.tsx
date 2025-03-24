@@ -5,7 +5,7 @@ import haciendaLogo from "../../../assets/icons/SignInLogo.png"
 import bellIcon from "../../../assets/icons/bell_icon.png"
 
 
-const Slide1: React.FC = () => {
+const Slide2: React.FC = () => {
   return (
       <div className="w-full h-full relative">
         {/* Background Image */}
@@ -28,11 +28,11 @@ const Slide1: React.FC = () => {
           bg-gradient-to-r from-[#0500FF] to-[#030099] 
            hover:from-[#32BF20] hover:via-[#289619] hover:to-[#1E7014]
            w-[370px] h-[70px] flex items-center gap-[20px]">
-            <img className="ml-[5%] w-[15%] h-[70%]" src={bellIcon}/>
+            <img className="ml-[2%] w-[15%] h-[70%]" src={bellIcon}/>
             <span className="text-[35px] font-bold text-white">RESERVATION</span>
           </button>
       </div>
   );
 };
 
-export default Slide1;
+export default Slide2;

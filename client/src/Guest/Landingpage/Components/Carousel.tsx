@@ -6,6 +6,8 @@ import { Pagination, Autoplay } from "swiper/modules";
 import Slide1 from "./Slide1";
 import Slide2 from "./Slide2";
 import Slide3 from "./Slide3";
+import Slide4 from "./Slide4";
+import Slide5 from "./Slide5";
 
 const Carousel: React.FC = () => {
   return (
@@ -24,9 +26,15 @@ const Carousel: React.FC = () => {
         </SwiperSlide>
         <SwiperSlide>
           <Slide2 />
-        </SwiperSlide>*/}
+        </SwiperSlide>
         <SwiperSlide>
           <Slide3 />
+        </SwiperSlide>
+        <SwiperSlide>
+          <Slide4 />
+        </SwiperSlide>*/}
+        <SwiperSlide>
+          <Slide5 />
         </SwiperSlide>
       </Swiper>
 

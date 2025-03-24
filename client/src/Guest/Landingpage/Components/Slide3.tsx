@@ -4,27 +4,32 @@ import cafetext from "../../../assets/images/cafe-text.png"
 import haciendaLogo from "../../../assets/icons/SignInLogo.png"
 import bellIcon from "../../../assets/icons/bell_icon.png"
 import poolCaro from "../../../assets/images/poolcaro.png"
+import sunIcon from "../../../assets/icons/sun.png"
+import umbrellaIcon from "../../../assets/icons/umbrella.png"
 
-
-const Slide1: React.FC = () => {
+const Slide3: React.FC = () => {
   return (
       <div className="w-full h-full relative">
         {/* Background Image */}
         <img className="w-full h-full object-cover" src={poolCaro} alt="Slide 1" />
 
-          <div className="absolute top-[45%] top-1/2 right-[150px] transform -translate-y-1/2 w-[370px] 
-          h-[270px] bg-[#4D4C4C82] rounded-[30px] flex flex-col justify-center items-center gap-[2%]
+          <div className="absolute top-[45%] top-1/2 right-[150px] transform -translate-y-1/2 w-[400px] 
+          h-[300px] bg-[#4D4C4C82] rounded-[40px] flex flex-col justify-center items-center gap-[5%]
            border-1 border-black">
-            <h1 className="text-yellow-300 text-[52px] mt-[-8%]">
+            <h1 className="text-yellow-300 text-[55px] mt-[3%]">
               Day Swimming
             </h1>
-            <p className="font-bold text-[35px] opacity-100 text-white text-center">
+            <p className="font-bold text-[35px] opacity-100 text-white text-center leading-[35px]">
               Enjoy The <br/>
-            Summer Heat <br/>
+              Summer Heat <br/>
             </p>
+            <div className="flex flex-row gap-[20px]">
+                <img className="w-[40px] h-[40px]" src={umbrellaIcon}/>
+                <img className="w-[40px] h-[40px]" src={sunIcon}/>
+            </div>
           </div>
       </div>
   );
 };
 
-export default Slide1;
+export default Slide3;
