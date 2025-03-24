@@ -4,6 +4,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import Slide1 from "./Slide1";
+import Slide2 from "./Slide2";
 
 const Carousel: React.FC = () => {
   return (
@@ -16,11 +17,12 @@ const Carousel: React.FC = () => {
         pagination={{ clickable: true }}
         className="h-full w-full"
       >
+        {/*
         <SwiperSlide>
           <Slide1 />
-        </SwiperSlide>
+        </SwiperSlide>*/}
         <SwiperSlide>
-          <Slide1 />
+          <Slide2 />
         </SwiperSlide>
       </Swiper>
 
