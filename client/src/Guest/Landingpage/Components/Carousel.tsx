@@ -22,7 +22,7 @@ const Carousel: React.FC = () => {
           <Slide1 />
         </SwiperSlide>*/}
         <SwiperSlide>
-          <Slide2 />
+          <Slide1 />
         </SwiperSlide>
       </Swiper>
 
