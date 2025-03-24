@@ -1,6 +1,5 @@
 import React from "react";
-import slideImage from "../../../assets/images/main-page.jpg";
-import cafetext from "../../../assets/images/cafe-text.png"
+import slideImage from "../../../assets/images/main-page.jpg"
 import haciendaLogo from "../../../assets/icons/SignInLogo.png"
 import bellIcon from "../../../assets/icons/bell_icon.png"
 
