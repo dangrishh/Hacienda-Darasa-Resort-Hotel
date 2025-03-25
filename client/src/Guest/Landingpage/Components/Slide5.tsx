@@ -15,8 +15,13 @@ const Slide5: React.FC = () => {
             <div className="absolute top-[50%] top-1/2 left-[50px] transform -translate-y-1/2 w-[500px] 
             h-[400px] bg-[#4D4C4C82] rounded-[40px] flex flex-col justify-center items-center gap-[5%]
             border-1 border-black">
+                {/* Hearts Decoration */}
+                <div className="absolute top-[-8%] left-1/2 transform -translate-x-1/2 flex gap-[300px] pr-[50%]">
+                    <img className="w-[130px] h-[130px]" src={heartLeft} alt="Heart Left" />
+                    <img className="w-[130px] h-[130px]" src={heartRight} alt="Heart Right" />
+                </div>
                 <p className="font-semibold text-[38px] opacity-100 text-white text-center leading-[40px]
-                mt-[10%]">
+                mt-[5%]">
                 "Celebrate love this <br/>
                 February 14th with our <br/>
                 exclusive couples' <br/>
@@ -33,11 +38,11 @@ const Slide5: React.FC = () => {
                 <img className="w-full h-full" src={seasonsofLove} alt="Seasons of Love" />
                 
                 {/* Hearts Decoration (Now on top of the button) */}
-                <div className="absolute top-[67%] left-1/2 transform -translate-x-1/2 flex gap-[20px] z-10 pt-[3%]">
-                    <img className="w-[30px] h-[30px]" src={heartLeft} alt="Heart Left" />
-                    <img className="w-[25px] h-[25px]" src={heartLeft} alt="Heart Left" />
-                    <img className="w-[25px] h-[25px]" src={heartRight} alt="Heart Right" />
-                    <img className="w-[30px] h-[30px]" src={heartRight} alt="Heart Right" />
+                <div className="absolute top-[67%] left-1/2 transform -translate-x-1/2 flex gap-[30px] z-10 pt-[15px] pl-[2%]">
+                    <img className="w-[30px] h-[30px] rotate-[10deg]" src={heartLeft} alt="Heart Left" />
+                    <img className="w-[25px] h-[25px] rotate-[20deg] mt-[2px] mr-[25px]" src={heartLeft} alt="Heart Left" />
+                    <img className="w-[25px] h-[25px] rotate-[-5deg]  mt-[2px]" src={heartRight} alt="Heart Right" />
+                    <img className="w-[30px] h-[30px] rotate-[-5deg]" src={heartRight} alt="Heart Right" />
                 </div>
 
                 {/* Button */}

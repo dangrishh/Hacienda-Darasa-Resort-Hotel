@@ -20,7 +20,7 @@ const Carousel: React.FC = () => {
         pagination={{ clickable: true }}
         className="h-full w-full"
       >
-        {/*
+        
         <SwiperSlide>
           <Slide1 />
         </SwiperSlide>
@@ -32,7 +32,7 @@ const Carousel: React.FC = () => {
         </SwiperSlide>
         <SwiperSlide>
           <Slide4 />
-        </SwiperSlide>*/}
+        </SwiperSlide>
         <SwiperSlide>
           <Slide5 />
         </SwiperSlide>
